@@ -111,15 +111,14 @@ else
         options.UseInMemoryDatabase("CelestiaDb"));
 }
 
-// 3. Configure permissive CORS for Vite React client
+// 3. Configure permissive CORS for Vite React client (Allow Any Origin since JWT is stateless and sent in Headers)
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowViteClient", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:5174", "http://127.0.0.1:5173", "http://127.0.0.1:5174")
+        policy.AllowAnyOrigin()
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
     });
 });
 
