@@ -287,8 +287,8 @@ export const AdminDashboard = () => {
                     <div className="chart-container">
                       {analytics.dailyViews.map((day, idx) => {
                         // Calculate percentage height
-                        const maxViews = Math.max(...analytics.dailyViews.map(d => d.Views), 1);
-                        const pctHeight = (day.Views / maxViews) * 80; // scale to 80% max
+                        const maxViews = Math.max(...analytics.dailyViews.map(d => d.views), 1);
+                        const pctHeight = (day.views / maxViews) * 80; // scale to 80% max
                         
                         return (
                           <div key={idx} className="chart-bar-col">
@@ -297,12 +297,12 @@ export const AdminDashboard = () => {
                               style={{ height: `${Math.max(pctHeight, 5)}%` }}
                             >
                               <div className="chart-tooltip">
-                                <strong>{day.Views} views</strong><br/>
-                                <span style={{fontSize: '9px'}}>{new Date(day.Date).toLocaleDateString('vi-VN')}</span>
+                                <strong>{day.views} views</strong><br/>
+                                <span style={{fontSize: '9px'}}>{new Date(day.date).toLocaleDateString('vi-VN')}</span>
                               </div>
                             </div>
                             <span className="chart-label">
-                              {idx % 5 === 0 ? day.Date.substring(8, 10) : ''}
+                              {idx % 5 === 0 ? day.date.substring(8, 10) : ''}
                             </span>
                           </div>
                         );
@@ -316,23 +316,23 @@ export const AdminDashboard = () => {
                       <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '16px' }}>Phân Phối Thiết Bị</h3>
                       <div className="device-donut-wrap">
                         {analytics.deviceDistribution.map((item, idx) => {
-                          const total = analytics.deviceDistribution.reduce((acc, curr) => acc + curr.Count, 0) || 1;
-                          const pct = Math.round((item.Count / total) * 100);
+                          const total = analytics.deviceDistribution.reduce((acc, curr) => acc + curr.count, 0) || 1;
+                          const pct = Math.round((item.count / total) * 100);
                           const colors = { desktop: '#3b82f6', mobile: '#10b981', tablet: '#f59e0b' };
                           
                           return (
                             <div key={idx}>
                               <div className="donut-row">
                                 <span className="donut-label-wrapper">
-                                  <div className="donut-color-dot" style={{ background: colors[item.Device] || '#3b82f6' }}></div>
+                                  <div className="donut-color-dot" style={{ background: colors[item.device] || '#3b82f6' }}></div>
                                   <span style={{ textTransform: 'capitalize' }}>
-                                    {item.Device === 'desktop' ? 'Máy tính để bàn' : item.Device === 'mobile' ? 'Điện thoại di động' : 'Máy tính bảng'}
+                                    {item.device === 'desktop' ? 'Máy tính để bàn' : item.device === 'mobile' ? 'Điện thoại di động' : 'Máy tính bảng'}
                                   </span>
                                 </span>
-                                <strong style={{ fontSize: '13px' }}>{item.Count} ({pct}%)</strong>
+                                <strong style={{ fontSize: '13px' }}>{item.count} ({pct}%)</strong>
                               </div>
                               <div className="donut-bar-bg">
-                                <div className="donut-bar-fill" style={{ width: `${pct}%`, background: colors[item.Device] || '#3b82f6' }}></div>
+                                <div className="donut-bar-fill" style={{ width: `${pct}%`, background: colors[item.device] || '#3b82f6' }}></div>
                               </div>
                             </div>
                           );
@@ -351,7 +351,7 @@ export const AdminDashboard = () => {
                             padding: '6px 12px',
                             borderRadius: '30px'
                           }}>
-                            <strong>{item.Region}</strong>: {item.Count} views
+                            <strong>{item.region}</strong>: {item.count} views
                           </div>
                         ))}
                       </div>
@@ -375,10 +375,10 @@ export const AdminDashboard = () => {
                     <tbody>
                       {analytics.popularDestinations.map((dest, idx) => (
                         <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
-                          <td style={{ padding: '16px', fontWeight: '600' }}>{dest.Name}</td>
-                          <td style={{ padding: '16px' }}>👀 {dest.Views}</td>
-                          <td style={{ padding: '16px' }}>💬 {dest.ReviewsCount}</td>
-                          <td style={{ padding: '16px', color: '#f59e0b', fontWeight: '700' }}>★ {dest.Rating}</td>
+                          <td style={{ padding: '16px', fontWeight: '600' }}>{dest.name}</td>
+                          <td style={{ padding: '16px' }}>👀 {dest.views}</td>
+                          <td style={{ padding: '16px' }}>💬 {dest.reviewsCount}</td>
+                          <td style={{ padding: '16px', color: '#f59e0b', fontWeight: '700' }}>★ {dest.rating}</td>
                           <td style={{ padding: '16px' }}>
                             <span style={{ fontSize: '11px', background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', border: '1px solid rgba(16, 185, 129, 0.2)', padding: '2px 8px', borderRadius: '4px' }}>
                               Đang hoạt động
