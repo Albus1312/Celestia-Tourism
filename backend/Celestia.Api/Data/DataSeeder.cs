@@ -12,6 +12,56 @@ namespace Celestia.Api.Data
         {
             context.Database.EnsureCreated();
 
+            // ALWAYS ensure the admin and editor default users exist with proper BCrypt hashed passwords!
+            var adminUser = context.Users.FirstOrDefault(u => u.Username.ToLower() == "admin");
+            if (adminUser == null)
+            {
+                adminUser = new User 
+                { 
+                    Username = "admin", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"), 
+                    FullName = "Nguyễn Văn Trưởng Ban", 
+                    Email = "admin@celestia.vn", 
+                    Role = "Admin", 
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                context.Users.Add(adminUser);
+            }
+            else
+            {
+                adminUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123");
+                adminUser.Role = "Admin";
+                adminUser.IsActive = true;
+                context.Users.Update(adminUser);
+            }
+
+            var editorUser = context.Users.FirstOrDefault(u => u.Username.ToLower() == "editor");
+            if (editorUser == null)
+            {
+                editorUser = new User 
+                { 
+                    Username = "editor", 
+                    PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123"), 
+                    FullName = "Trần Biên Tập", 
+                    Email = "editor@celestia.vn", 
+                    Role = "Editor", 
+                    IsActive = true,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                };
+                context.Users.Add(editorUser);
+            }
+            else
+            {
+                editorUser.PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123");
+                editorUser.Role = "Editor";
+                editorUser.IsActive = true;
+                context.Users.Update(editorUser);
+            }
+            context.SaveChanges();
+
             if (context.Regions.Any())
             {
                 return; // Database already seeded
@@ -153,14 +203,7 @@ namespace Celestia.Api.Data
             context.LandingPageThemes.AddRange(themes);
             context.SaveChanges();
 
-            // 5. Seed Users
-            var users = new List<User>
-            {
-                new User { Id = 1, Username = "admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"), FullName = "Nguyễn Văn Trưởng Ban", Email = "admin@celestia.vn", Role = "Admin", IsActive = true },
-                new User { Id = 2, Username = "editor", PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123"), FullName = "Trần Biên Tập", Email = "editor@celestia.vn", Role = "Editor", IsActive = true }
-            };
-            context.Users.AddRange(users);
-            context.SaveChanges();
+            // 5. Seed Users (Moved to top of Seed method for dynamic initialization)
 
             // 6. Seed Destinations with full Landing Page Config and Sections
             // Ha Long Bay
