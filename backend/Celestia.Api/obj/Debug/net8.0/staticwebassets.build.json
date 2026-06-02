@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "yPys+Nf4UX+QjELMM4W2YNsdO6gWQPNMIKNAJZqDoOU=",
+  "Source": "Celestia.Api",
+  "BasePath": "_content/Celestia.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

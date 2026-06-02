@@ -1,0 +1,598 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text.Json;
+using Celestia.Api.Models;
+
+namespace Celestia.Api.Data
+{
+    public static class DataSeeder
+    {
+        public static void Seed(CelestiaDbContext context)
+        {
+            context.Database.EnsureCreated();
+
+            if (context.Regions.Any())
+            {
+                return; // Database already seeded
+            }
+
+            // 1. Seed Regions
+            var regions = new List<Region>
+            {
+                new Region { Id = "bac-bo", Name = "Bắc Bộ (Miền Bắc)", Description = "Nơi khởi nguồn lịch sử lâu đời, núi non trùng điệp và văn hóa ngàn năm văn hiến." },
+                new Region { Id = "trung-bo", Name = "Trung Bộ (Miền Trung)", Description = "Dải đất duyên hải đầy nắng gió, sở hữu những di sản văn hóa thế giới và bãi biển tuyệt đẹp." },
+                new Region { Id = "nam-bo", Name = "Nam Bộ (Miền Nam)", Description = "Vùng đất trù phú với những dòng sông trĩu nặng phù sa, nhịp sống hiện đại và phóng khoáng." }
+            };
+            context.Regions.AddRange(regions);
+            context.SaveChanges();
+
+            // 2. Seed All 63 Provinces of Vietnam
+            var provinces = new List<Province>
+            {
+                // Bắc Bộ (25 provinces)
+                new Province { Id = "hanoi", Name = "Hà Nội", RegionId = "bac-bo" },
+                new Province { Id = "quang-ninh", Name = "Quảng Ninh", RegionId = "bac-bo" },
+                new Province { Id = "lao-cai", Name = "Lào Cai", RegionId = "bac-bo" },
+                new Province { Id = "ninh-binh", Name = "Ninh Bình", RegionId = "bac-bo" },
+                new Province { Id = "ha-giang", Name = "Hà Giang", RegionId = "bac-bo" },
+                new Province { Id = "cao-bang", Name = "Cao Bằng", RegionId = "bac-bo" },
+                new Province { Id = "dien-bien", Name = "Điện Biên", RegionId = "bac-bo" },
+                new Province { Id = "lai-chau", Name = "Lai Châu", RegionId = "bac-bo" },
+                new Province { Id = "son-la", Name = "Sơn La", RegionId = "bac-bo" },
+                new Province { Id = "hoa-binh", Name = "Hòa Bình", RegionId = "bac-bo" },
+                new Province { Id = "yen-bai", Name = "Yên Bái", RegionId = "bac-bo" },
+                new Province { Id = "tuyen-quang", Name = "Tuyên Quang", RegionId = "bac-bo" },
+                new Province { Id = "bac-kan", Name = "Bắc Kạn", RegionId = "bac-bo" },
+                new Province { Id = "lang-son", Name = "Lạng Sơn", RegionId = "bac-bo" },
+                new Province { Id = "thai-nguyen", Name = "Thái Nguyên", RegionId = "bac-bo" },
+                new Province { Id = "phu-tho", Name = "Phú Thọ", RegionId = "bac-bo" },
+                new Province { Id = "vinh-phuc", Name = "Vĩnh Phúc", RegionId = "bac-bo" },
+                new Province { Id = "bac-giang", Name = "Bắc Giang", RegionId = "bac-bo" },
+                new Province { Id = "bac-ninh", Name = "Bắc Ninh", RegionId = "bac-bo" },
+                new Province { Id = "hai-duong", Name = "Hải Dương", RegionId = "bac-bo" },
+                new Province { Id = "hai-phong", Name = "Hải Phòng", RegionId = "bac-bo" },
+                new Province { Id = "hung-yen", Name = "Hưng Yên", RegionId = "bac-bo" },
+                new Province { Id = "thai-binh", Name = "Thái Bình", RegionId = "bac-bo" },
+                new Province { Id = "ha-nam", Name = "Hà Nam", RegionId = "bac-bo" },
+                new Province { Id = "nam-dinh", Name = "Nam Định", RegionId = "bac-bo" },
+
+                // Trung Bộ (19 provinces)
+                new Province { Id = "thanh-hoa", Name = "Thanh Hóa", RegionId = "trung-bo" },
+                new Province { Id = "nghe-an", Name = "Nghệ An", RegionId = "trung-bo" },
+                new Province { Id = "ha-tinh", Name = "Hà Tĩnh", RegionId = "trung-bo" },
+                new Province { Id = "quang-binh", Name = "Quảng Bình", RegionId = "trung-bo" },
+                new Province { Id = "quang-tri", Name = "Quảng Trị", RegionId = "trung-bo" },
+                new Province { Id = "thua-thien-hue", Name = "Thừa Thiên Huế", RegionId = "trung-bo" },
+                new Province { Id = "da-nang", Name = "Đà Nẵng", RegionId = "trung-bo" },
+                new Province { Id = "quang-nam", Name = "Quảng Nam", RegionId = "trung-bo" },
+                new Province { Id = "quang-ngai", Name = "Quảng Ngãi", RegionId = "trung-bo" },
+                new Province { Id = "binh-dinh", Name = "Bình Định", RegionId = "trung-bo" },
+                new Province { Id = "phu-yen", Name = "Phú Yên", RegionId = "trung-bo" },
+                new Province { Id = "khanh-hoa", Name = "Khánh Hòa", RegionId = "trung-bo" },
+                new Province { Id = "ninh-thuan", Name = "Ninh Thuận", RegionId = "trung-bo" },
+                new Province { Id = "binh-thuan", Name = "Bình Thuận", RegionId = "trung-bo" },
+                new Province { Id = "kon-tum", Name = "Kon Tum", RegionId = "trung-bo" },
+                new Province { Id = "gia-lai", Name = "Gia Lai", RegionId = "trung-bo" },
+                new Province { Id = "dak-lak", Name = "Đắk Lắk", RegionId = "trung-bo" },
+                new Province { Id = "dak-nong", Name = "Đắk Nông", RegionId = "trung-bo" },
+                new Province { Id = "lam-dong", Name = "Lâm Đồng", RegionId = "trung-bo" },
+
+                // Nam Bộ (19 provinces)
+                new Province { Id = "ho-chi-minh", Name = "TP. Hồ Chí Minh", RegionId = "nam-bo" },
+                new Province { Id = "ba-ria-vung-tau", Name = "Bà Rịa - Vũng Tàu", RegionId = "nam-bo" },
+                new Province { Id = "tay-ninh", Name = "Tây Ninh", RegionId = "nam-bo" },
+                new Province { Id = "binh-duong", Name = "Bình Dương", RegionId = "nam-bo" },
+                new Province { Id = "dong-nai", Name = "Đồng Nai", RegionId = "nam-bo" },
+                new Province { Id = "long-an", Name = "Long An", RegionId = "nam-bo" },
+                new Province { Id = "tien-giang", Name = "Tiền Giang", RegionId = "nam-bo" },
+                new Province { Id = "ben-tre", Name = "Bến Tre", RegionId = "nam-bo" },
+                new Province { Id = "tra-vinh", Name = "Trà Vinh", RegionId = "nam-bo" },
+                new Province { Id = "vinh-long", Name = "Vĩnh Long", RegionId = "nam-bo" },
+                new Province { Id = "dong-thap", Name = "Đồng Tháp", RegionId = "nam-bo" },
+                new Province { Id = "an-giang", Name = "An Giang", RegionId = "nam-bo" },
+                new Province { Id = "kien-giang", Name = "Kiên Giang", RegionId = "nam-bo" },
+                new Province { Id = "can-tho", Name = "Cần Thơ", RegionId = "nam-bo" },
+                new Province { Id = "hau-giang", Name = "Hậu Giang", RegionId = "nam-bo" },
+                new Province { Id = "soc-trang", Name = "Sóc Trăng", RegionId = "nam-bo" },
+                new Province { Id = "bac-lieu", Name = "Bạc Liêu", RegionId = "nam-bo" },
+                new Province { Id = "ca-mau", Name = "Cà Mau", RegionId = "nam-bo" },
+                new Province { Id = "binh-phuoc", Name = "Bình Phước", RegionId = "nam-bo" }
+            };
+            context.Provinces.AddRange(provinces);
+            context.SaveChanges();
+
+            // 3. Seed Destination Categories
+            var categories = new List<DestinationCategory>
+            {
+                new DestinationCategory { Id = 1, Name = "Vịnh & Đảo / Biển", Slug = "beach", Description = "Bãi biển cát trắng, vịnh biển đảo đá vôi xanh ngọc rực rỡ.", Icon = "Waves" },
+                new DestinationCategory { Id = 2, Name = "Di sản & Văn hóa", Slug = "cultural", Description = "Khu phố cổ kính, cung điện triều đình và di tích ngàn năm.", Icon = "Castle" },
+                new DestinationCategory { Id = 3, Name = "Núi rừng & Trekking", Slug = "mountain", Description = "Những đỉnh núi mây mù, thửa ruộng bậc thang kỳ vĩ.", Icon = "Mountain" },
+                new DestinationCategory { Id = 4, Name = "Sinh thái & Nghỉ dưỡng", Slug = "eco", Description = "Khu bảo tồn thiên nhiên, nghỉ dưỡng thanh tĩnh giữa đại ngàn.", Icon = "Tree" }
+            };
+            context.DestinationCategories.AddRange(categories);
+            context.SaveChanges();
+
+            // 4. Seed Themes
+            var themes = new List<LandingPageTheme>
+            {
+                new LandingPageTheme 
+                { 
+                    Id = "ocean-breeze", 
+                    Name = "Ocean Breeze (Hơi thở đại dương)", 
+                    Slug = "ocean-breeze", 
+                    Description = "Phong cách trẻ trung, khoáng đạt với tông màu xanh lục, xanh lam ngọc và các chi tiết sóng biển mượt mà.",
+                    PrimaryColor = "#0284c7", 
+                    SecondaryColor = "#f43f5e", 
+                    BackgroundColor = "#f0f9ff", 
+                    FontFamily = "Outfit" 
+                },
+                new LandingPageTheme 
+                { 
+                    Id = "heritage-gold", 
+                    Name = "Heritage Gold (Hoàng triều cổ kính)", 
+                    Slug = "heritage-gold", 
+                    Description = "Vẻ đẹp trang nghiêm, mang tính tự sự lịch sử với gam màu đỏ burgundy trầm ấm kết hợp vàng ánh kim tôn quý.",
+                    PrimaryColor = "#991b1b", 
+                    SecondaryColor = "#d97706", 
+                    BackgroundColor = "#fdfcfa", 
+                    FontFamily = "Playfair Display" 
+                },
+                new LandingPageTheme 
+                { 
+                    Id = "mountain-mist", 
+                    Name = "Mountain Mist (Sương mù sườn núi)", 
+                    Slug = "mountain-mist", 
+                    Description = "Thiết kế góc cạnh mạnh mẽ, hoang sơ với tông màu xanh lá sẫm rừng thông kết hợp xám đá bazan huyền ảo.",
+                    PrimaryColor = "#15803d", 
+                    SecondaryColor = "#4b5563", 
+                    BackgroundColor = "#f4f6f5", 
+                    FontFamily = "Plus Jakarta Sans" 
+                }
+            };
+            context.LandingPageThemes.AddRange(themes);
+            context.SaveChanges();
+
+            // 5. Seed Users
+            var users = new List<User>
+            {
+                new User { Id = 1, Username = "admin", PasswordHash = BCrypt.Net.BCrypt.HashPassword("admin123"), FullName = "Nguyễn Văn Trưởng Ban", Email = "admin@celestia.vn", Role = "Admin", IsActive = true },
+                new User { Id = 2, Username = "editor", PasswordHash = BCrypt.Net.BCrypt.HashPassword("editor123"), FullName = "Trần Biên Tập", Email = "editor@celestia.vn", Role = "Editor", IsActive = true }
+            };
+            context.Users.AddRange(users);
+            context.SaveChanges();
+
+            // 6. Seed Destinations with full Landing Page Config and Sections
+            // Ha Long Bay
+            var halong = new Destination
+            {
+                Id = 1,
+                Name = "Vịnh Hạ Long",
+                Slug = "vinh-ha-long",
+                Description = "Kỳ quan thiên nhiên thế giới tại Việt Nam với hàng ngàn đảo đá vôi nhô lên từ làn nước xanh lục bảo.",
+                DetailedDescription = "Vịnh Hạ Long nằm ở bờ tây vịnh Bắc Bộ thuộc vùng biển thành phố Hạ Long, tỉnh Quảng Ninh. Với diện tích 1.553 km² gồm 1.969 hòn đảo đá vôi lớn nhỏ, Vịnh Hạ Long đã hai lần được UNESCO công nhận là Di sản thiên nhiên thế giới về các giá trị thẩm mỹ và địa chất địa mạo. Nơi đây là điểm đến du lịch biểu tượng bậc nhất của Việt Nam.",
+                Location = "Thành phố Hạ Long, Quảng Ninh",
+                Latitude = 20.9101,
+                Longitude = 107.1839,
+                ProvinceId = "quang-ninh",
+                CategoryId = 1,
+                Rating = 4.9,
+                ThumbnailUrl = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=600&q=80",
+                CoverUrl = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=80"
+            };
+
+            // Sapa
+            var sapa = new Destination
+            {
+                Id = 2,
+                Name = "Sa Pa - Thị trấn trong mây",
+                Slug = "sa-pa",
+                Description = "Vùng đất sương mù huyền ảo với những thửa ruộng bậc thang trải dài bên sườn núi Fansipan vĩ đại.",
+                DetailedDescription = "Sa Pa là một thị xã vùng cao thuộc tỉnh Lào Cai, nằm ở độ cao trung bình 1.500m - 1.800m so với mực nước biển. Thị xã Sa Pa ẩn chứa bao điều kỳ diệu của cảnh sắc thiên nhiên với ruộng bậc thang được tạp chí Travel+Leisure bình chọn là một trong những thửa ruộng bậc thang đẹp nhất thế giới, cùng ngọn núi Fansipan - nóc nhà Đông Dương cao 3.143m kiêu hãnh.",
+                Location = "Thị xã Sa Pa, Lào Cai",
+                Latitude = 22.3364,
+                Longitude = 103.8438,
+                ProvinceId = "lao-cai",
+                CategoryId = 3,
+                Rating = 4.8,
+                ThumbnailUrl = "https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=600&q=80",
+                CoverUrl = "https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1600&q=80"
+            };
+
+            // Hoi An
+            var hoian = new Destination
+            {
+                Id = 3,
+                Name = "Phố cổ Hội An",
+                Slug = "pho-co-hoi-an",
+                Description = "Đô thị cổ rực rỡ ánh đèn lồng bên dòng sông Hoài thơ mộng, lưu giữ nét đẹp kiến trúc Đông Tây hòa quyện.",
+                DetailedDescription = "Phố cổ Hội An là một đô thị cổ nằm ở hạ lưu sông Thu Bồn, thuộc vùng đồng bằng ven biển tỉnh Quảng Nam, Việt Nam. Hội An từng là một thương cảng quốc tế sầm uất thế kỷ XVII-XVIII, nơi giao thoa của những nền văn hóa Việt, Trung, Nhật và phương Tây. Đô thị cổ này đã được UNESCO công nhận là Di sản văn hóa thế giới vào năm 1999.",
+                Location = "Thành phố Hội An, Quảng Nam",
+                Latitude = 15.8801,
+                Longitude = 108.3380,
+                ProvinceId = "quang-nam",
+                CategoryId = 2,
+                Rating = 4.9,
+                ThumbnailUrl = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80",
+                CoverUrl = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1600&q=80"
+            };
+
+            context.Destinations.AddRange(new[] { halong, sapa, hoian });
+            context.SaveChanges();
+
+            // Seed Landing Page Configs
+            // Ha Long Configuration
+            var halongConfig = new LandingPageConfig
+            {
+                DestinationId = 1,
+                ThemeId = "ocean-breeze",
+                HeroTitle = "Vịnh Hạ Long",
+                HeroSubtitle = "Kỳ quan đá vôi rực rỡ trồi dậy từ làn nước ngọc lục bảo",
+                HeroImageUrl = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=1600&q=80",
+                SeoTitle = "Vịnh Hạ Long - Khám phá Kỳ quan Thiên nhiên Thế giới",
+                SeoDescription = "Nền tảng chính thức giới thiệu thông tin du lịch, trải nghiệm du thuyền cao cấp và hướng dẫn hành trình chi tiết tại Vịnh Hạ Long."
+            };
+
+            // Sapa Configuration
+            var sapaConfig = new LandingPageConfig
+            {
+                DestinationId = 2,
+                ThemeId = "mountain-mist",
+                HeroTitle = "Chinh Phục Sa Pa",
+                HeroSubtitle = "Hành trình chạm đỉnh mây ngàn và khám phá bản sắc Tây Bắc kì vĩ",
+                HeroImageUrl = "https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=1600&q=80",
+                SeoTitle = "Sa Pa - Thị trấn trong sương, chinh phục đỉnh Fansipan",
+                SeoDescription = "Cổng thông tin đặt tour trekking Sa Pa, ngắm ruộng bậc thang và tận hưởng sương sớm lưng chừng đồi núi Tây Bắc."
+            };
+
+            // Hoi An Configuration
+            var hoianConfig = new LandingPageConfig
+            {
+                DestinationId = 3,
+                ThemeId = "heritage-gold",
+                HeroTitle = "Hội An Hoài Cổ",
+                HeroSubtitle = "Thả hồn giữa phố đèn lồng lung linh và dòng sông lịch sử trôi êm đềm",
+                HeroImageUrl = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=1600&q=80",
+                SeoTitle = "Phố Cổ Hội An - Nét trầm mặc dòng thời gian thương cảng",
+                SeoDescription = "Tìm hiểu lịch sử thương cảng cổ kính Hội An, ẩm thực Cao Lầu đặc sắc và lễ hội đêm rằm lộng lẫy."
+            };
+
+            context.LandingPageConfigs.AddRange(new[] { halongConfig, sapaConfig, hoianConfig });
+            context.SaveChanges();
+
+            // Seed Landing Page Sections (JSON formatted components)
+            // Ha Long Bay Sections
+            var halongSections = new List<LandingPageSection>
+            {
+                new LandingPageSection
+                {
+                    LandingPageConfigId = halongConfig.Id,
+                    SectionType = "intro",
+                    Title = "Huyền Thoại Nơi Rồng Đáp Xuống",
+                    Subtitle = "Khám phá địa lý và lịch sử kiến tạo độc bản",
+                    SortOrder = 1,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        paragraphs = new[] {
+                            "Theo truyền thuyết dân gian, khi đất nước mới thành lập, có giặc ngoại xâm tràn vào. Ngọc Hoàng đã sai Rồng Mẹ mang theo một đàn Rồng Con xuống hạ giới giúp người Việt đánh giặc. Khi thuyền giặc từ ngoài biển tiến vào, đàn rồng đã phun ra vô số châu ngọc, lập tức hóa thành hàng ngàn đảo đá ngăn chặn bước tiến quân thù.",
+                            "Về mặt khoa học, Vịnh Hạ Long là kết quả của quá trình tiến hóa địa chất kéo dài hàng trăm triệu năm qua với môi trường biển nhiệt đới ẩm, tạo nên cấu trúc karst tháp đá độc đáo độc nhất vô nhị trên hành cầu."
+                        },
+                        stats = new[] {
+                            new { label = "Diện tích", value = "1,553 km²" },
+                            new { label = "Hòn đảo", value = "1,969 đảo" },
+                            new { label = "Tuổi kiến tạo", value = "500 triệu năm" },
+                            new { label = "Lượt khách/năm", value = "4.4 triệu" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = halongConfig.Id,
+                    SectionType = "activities",
+                    Title = "Trải Nghiệm Độc Nhất Vô Nhị",
+                    Subtitle = "Hoạt động ngoài trời không thể bỏ lỡ tại vịnh biển kỳ quan",
+                    SortOrder = 2,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        items = new[] {
+                            new { 
+                                title = "Nghỉ dưỡng du thuyền 5 sao", 
+                                description = "Tận hưởng giấc ngủ giữa lòng vịnh kỳ quan trên những chiếc du thuyền sang trọng, thưởng thức bữa tối hải sản dưới ánh sao đêm hoang sơ.",
+                                icon = "Ship",
+                                duration = "2 ngày 1 đêm"
+                            },
+                            new { 
+                                title = "Chèo thuyền Kayak tại Hang Luồn", 
+                                description = "Tự tay khua mái chèo lách qua vách núi thấp để vào đầm nước phẳng lặng xanh ngắt như gương, ngắm nhìn đàn khỉ vàng leo trèo trên vách đá.",
+                                icon = "Compass",
+                                duration = "2 - 3 giờ"
+                            },
+                            new { 
+                                title = "Khám phá Động Sửng Sốt", 
+                                description = "Dạo bước qua những lòng hang rộng hàng ngàn mét vuông rực rỡ thạch nhũ muôn hình vạn trạng, được chiếu sáng lung linh như mê cung thần thoại.",
+                                icon = "Flame",
+                                duration = "1.5 giờ"
+                            },
+                            new { 
+                                title = "Bay trực thăng ngắm vịnh từ trên cao", 
+                                description = "Thu trọn tầm mắt hàng nghìn hòn đảo đá vôi nhấp nhô như những chiếc vảy rồng xanh khổng lồ xếp chồng lên nhau giữa làn nước biếc.",
+                                icon = "Wind",
+                                duration = "12 - 25 phút"
+                            }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = halongConfig.Id,
+                    SectionType = "gallery",
+                    Title = "Góc Nhìn Kỳ Quan",
+                    Subtitle = "Những khoảnh khắc quyến rũ được nhiếp ảnh gia ghi lại",
+                    SortOrder = 3,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        images = new[] {
+                            new { url = "https://images.unsplash.com/photo-1547950518-e4b77f98d022?auto=format&fit=crop&w=800&q=80", caption = "Hoàng hôn buông đỏ rực trên đỉnh đảo đá Ti Tốp" },
+                            new { url = "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80", caption = "Đoàn thuyền Kayak đầy sắc màu rực rỡ lướt êm" },
+                            new { url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", caption = "Bữa sáng sang trọng ngắm bình minh trên boong du thuyền" },
+                            new { url = "https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=800&q=80", caption = "Lòng hang động rực rỡ với thạch nhũ triệu năm tuổi" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = halongConfig.Id,
+                    SectionType = "cta",
+                    Title = "Khởi Hành Đến Hạ Long",
+                    Subtitle = "Nhận ngay ưu đãi gói dịch vụ trọn gói nghỉ dưỡng du thuyền cao cấp mùa hè này",
+                    SortOrder = 4,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        buttonText = "Đặt Tour Du Thuyền Ngay",
+                        hasForm = true,
+                        placeholderName = "Họ và tên của bạn...",
+                        placeholderPhone = "Số điện thoại liên hệ...",
+                        promoText = "Giảm giá 15% cho các lượt đặt chỗ trước ít nhất 30 ngày!"
+                    })
+                }
+            };
+
+            // Sapa Sections
+            var sapaSections = new List<LandingPageSection>
+            {
+                new LandingPageSection
+                {
+                    LandingPageConfigId = sapaConfig.Id,
+                    SectionType = "intro",
+                    Title = "Nơi Gặp Gỡ Đất Trời Tây Bắc",
+                    Subtitle = "Đắm mình trong không khí ôn đới mát lạnh quanh năm",
+                    SortOrder = 1,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        paragraphs = new[] {
+                            "Nằm dưới chân dãy Hoàng Liên Sơn hùng vĩ, Sa Pa là nơi hội tụ cảnh sắc nguyên sơ kỳ vĩ và đời sống văn hóa đậm đà bản sắc của 5 dân tộc thiểu số H'Mông, Dao đỏ, Tày, Giáy, Xá Phó.",
+                            "Sa Pa nổi tiếng với những biển mây cuồn cuộn phủ kín thị trấn mỗi sớm mai, cái se lạnh đặc trưng tựa như một góc châu Âu nhỏ giữa lòng Đông Nam Á và những đỉnh núi tuyết phủ trắng xóa vào những ngày đông giá rét cực độ."
+                        },
+                        stats = new[] {
+                            new { label = "Độ cao trung bình", value = "1,600m" },
+                            new { label = "Nóc nhà Đông Dương", value = "Fansipan 3,143m" },
+                            new { label = "Các sắc tộc", value = "5 dân tộc" },
+                            new { label = "Nhiệt độ mùa hè", value = "18°C - 23°C" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = sapaConfig.Id,
+                    SectionType = "activities",
+                    Title = "Trải Nghiệm Lưng Chừng Đồi Núi",
+                    Subtitle = "Những hành trình thử thách bản thân và hòa mình cùng dân bản địa",
+                    SortOrder = 2,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        items = new[] {
+                            new { 
+                                title = "Chinh phục cáp treo Fansipan", 
+                                description = "Bay lướt qua thung lũng Mường Hoa trên hệ thống cáp treo ba dây hiện đại nhất thế giới trước khi leo bộ chạm tay vào cột mốc 3.143m kiêu hãnh.",
+                                icon = "Navigation",
+                                duration = "3 - 4 giờ"
+                            },
+                            new { 
+                                title = "Trekking thung lũng Cát Cát", 
+                                description = "Men theo bậc đá cổ kính xuyên qua bản người H'Mông, ngắm dòng thác đổ trắng xóa bên cối xay nước khổng lồ và thuê những trang phục dệt thổ cẩm sặc sỡ.",
+                                icon = "MapPin",
+                                duration = "Bán ngày"
+                            },
+                            new { 
+                                title = "Thưởng thức ẩm thực lẩu cá hồi nóng hổi", 
+                                description = "Quây quần bên nồi lẩu nghi ngút khói giữa đêm Sa Pa 12 độ C, nhâm nhi ly rượu ngô Bản Phố thơm nồng cùng rau cải mèo đắng ngọt đặc sản vùng cao.",
+                                icon = "Utensils",
+                                duration = "Bữa tối"
+                            }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = sapaConfig.Id,
+                    SectionType = "gallery",
+                    Title = "Khung Cảnh Núi Rừng Kiêu Sa",
+                    Subtitle = "Vẻ đẹp hùng vĩ của thung lũng lúa xanh mướt",
+                    SortOrder = 3,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        images = new[] {
+                            new { url = "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=800&q=80", caption = "Thung lũng Mường Hoa mùa lúa chín vàng ươm" },
+                            new { url = "https://images.unsplash.com/photo-1508873696983-2df519f0397e?auto=format&fit=crop&w=800&q=80", caption = "Cột mốc chóp đỉnh Fansipan giữa đại ngàn mây trắng bao phủ" },
+                            new { url = "https://images.unsplash.com/photo-1540959733332-eab4deceeaf7?auto=format&fit=crop&w=800&q=80", caption = "Những đứa trẻ vùng cao ngây thơ vui đùa bên hiên nhà sàn cổ" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = sapaConfig.Id,
+                    SectionType = "cta",
+                    Title = "Lên Sa Pa Tránh Nóng Mùa Hè",
+                    Subtitle = "Đặt ngay combo khách sạn Boutique trung tâm kết hợp vé cáp treo Fansipan với giá cực sốc",
+                    SortOrder = 4,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        buttonText = "Đặt Combo Nghỉ Dưỡng Sa Pa",
+                        hasForm = true,
+                        placeholderName = "Họ tên người đăng ký...",
+                        placeholderPhone = "Số điện thoại nhận mã giảm giá...",
+                        promoText = "Miễn phí nâng hạng phòng View núi cho các cặp đôi đi hưởng tuần trăng mật!"
+                    })
+                }
+            };
+
+            // Hoi An Sections
+            var hoianSections = new List<LandingPageSection>
+            {
+                new LandingPageSection
+                {
+                    LandingPageConfigId = hoianConfig.Id,
+                    SectionType = "intro",
+                    Title = "Nơi Lắng Đọng Của Dòng Chảy Thời Gian",
+                    Subtitle = "Khám phá nét đẹp trầm mặc cổ kính của di sản văn hóa nhân loại",
+                    SortOrder = 1,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        paragraphs = new[] {
+                            "Không ồn ào vội vã, Hội An đón bước chân lữ khách bằng những mảng tường vàng phủ đầy rêu phong, mái ngói âm dương xô lệch nhuốm màu năm tháng và sắc hoa giấy hồng rực rủ bóng xuống thềm cửa gỗ.",
+                            "Mỗi đêm rằm âm lịch, cả khu phố tắt hết ánh điện cao áp, nhường chỗ cho hàng vạn chiếc đèn lồng thủ công thắp sáng lung linh ấm áp, tạo nên một khung cảnh huyền ảo đưa du khách trở về với thế kỷ XVII xa xưa hoài cổ."
+                        },
+                        stats = new[] {
+                            new { label = "Năm công nhận UNESCO", value = "1999" },
+                            new { label = "Di tích kiến trúc", value = "1,360 nhà cổ" },
+                            new { label = "Tuổi đời thương cảng", value = "400 năm" },
+                            new { label = "Ẩm thực truyền thống", value = "Cao Lầu, Mì Quảng" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = hoianConfig.Id,
+                    SectionType = "activities",
+                    Title = "Dạo Bước Bên Bờ Sông Thu Bồn",
+                    Subtitle = "Hoạt động mang đậm dấu ấn làng nghề truyền thống và ẩm thực dân gian",
+                    SortOrder = 2,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        items = new[] {
+                            new { 
+                                title = "Thả hoa đăng trên sông Hoài", 
+                                description = "Bước lên chiếc thuyền gỗ nhỏ mộc mạc, nhẹ nhàng chèo ra giữa dòng nước lấp lánh và thả trôi những ước nguyện tốt lành qua chiếc đèn hoa giấy nhỏ.",
+                                icon = "Sparkles",
+                                duration = "30 phút"
+                            },
+                            new { 
+                                title = "Thưởng thức Cao Lầu chuẩn vị nhà cổ", 
+                                description = "Trải nghiệm hương vị độc nhất vô nhị từ những sợi mì dai giòn làm từ nước giếng Bá Lễ nghìn năm, ăn kèm xá xíu đậm đà và rau thơm Trà Quế giòn mát ngọt lành.",
+                                icon = "Coffee",
+                                duration = "Bữa trưa"
+                            },
+                            new { 
+                                title = "Tự làm đèn lồng tre truyền thống", 
+                                description = "Ghé thăm xưởng thủ công nghệ nhân lâu năm, tự tay chuốt khung tre, dán lớp vải lụa tơ tằm mềm mại để tạo nên chiếc đèn lồng xinh xắn mang về làm quà kỉ niệm.",
+                                icon = "PenTool",
+                                duration = "1 - 2 giờ"
+                            }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = hoianConfig.Id,
+                    SectionType = "gallery",
+                    Title = "Những Góc Nhỏ Thơ Mộng",
+                    Subtitle = "Những ngõ nhỏ màu vàng cổ kính và ánh sáng huyền diệu",
+                    SortOrder = 3,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        images = new[] {
+                            new { url = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=800&q=80", caption = "Phố đèn lồng lộng lẫy sắc màu dưới bóng đêm" },
+                            new { url = "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80", caption = "Chùa Cầu cổ kính soi bóng uy nghiêm trên mặt kênh mát" }
+                        }
+                    })
+                },
+                new LandingPageSection
+                {
+                    LandingPageConfigId = hoianConfig.Id,
+                    SectionType = "cta",
+                    Title = "Đăng Ký Hành Trình Tìm Về Cội Nguồn",
+                    Subtitle = "Liên hệ ngay để được thiết kế tour đi bộ văn hóa riêng tư kèm hướng dẫn viên địa phương am tường lịch sử",
+                    SortOrder = 4,
+                    ContentJson = JsonSerializer.Serialize(new {
+                        buttonText = "Nhận Tư Vấn Tour Di Sản",
+                        hasForm = true,
+                        placeholderName = "Tên đầy đủ của quý khách...",
+                        placeholderPhone = "Số điện thoại di động...",
+                        promoText = "Tặng kèm 01 buổi chụp ảnh áo dài kỷ niệm miễn phí trong lòng phố cổ!"
+                    })
+                }
+            };
+
+            context.LandingPageSections.AddRange(halongSections);
+            context.LandingPageSections.AddRange(sapaSections);
+            context.LandingPageSections.AddRange(hoianSections);
+            context.SaveChanges();
+
+            // 7. Seed Reviews
+            var reviews = new List<Review>
+            {
+                new Review { DestinationId = 1, AuthorName = "David Miller", Rating = 5, Comment = "An absolute highlight of my trip to Southeast Asia. Cruising between these giant rocks is a lifetime experience!", CreatedAt = DateTime.UtcNow.AddDays(-2) },
+                new Review { DestinationId = 1, AuthorName = "Linh Nguyen", Rating = 5, Comment = "Vịnh Hạ Long đẹp tuyệt vời, đi tour du thuyền ban đêm ngắm sao cực kỳ thích. Nhất định sẽ quay lại lần sau!", CreatedAt = DateTime.UtcNow.AddDays(-5) },
+                new Review { DestinationId = 1, AuthorName = "Kazu Tanaka", Rating = 4, Comment = "Beautiful scenery but a bit crowded during the weekend. Kayaking was fun.", CreatedAt = DateTime.UtcNow.AddDays(-10) },
+
+                new Review { DestinationId = 2, AuthorName = "Sophia Dubois", Rating = 5, Comment = "Trekking in Sapa was breath-taking! The rice fields look like paintings. Locals are very friendly.", CreatedAt = DateTime.UtcNow.AddDays(-3) },
+                new Review { DestinationId = 2, AuthorName = "Minh Khang", Rating = 5, Comment = "Không khí Sa Pa tuyệt vời, mát rượi. Đỉnh Fansipan mây phủ trắng xóa, cảm giác như đi trên thiên đường.", CreatedAt = DateTime.UtcNow.AddDays(-8) },
+
+                new Review { DestinationId = 3, AuthorName = "Elena Petrova", Rating = 5, Comment = "Hoi An is magical! The lanterns at night made me feel like I was in a fairytale. The food is also incredible.", CreatedAt = DateTime.UtcNow.AddDays(-1) },
+                new Review { DestinationId = 3, AuthorName = "Tuấn Anh", Rating = 4, Comment = "Thích nhất buổi tối đi bộ ven sông Hoài thả đèn hoa đăng và ăn mì Quảng chuẩn vị ở quán ven đường.", CreatedAt = DateTime.UtcNow.AddDays(-6) }
+            };
+            context.Reviews.AddRange(reviews);
+            context.SaveChanges();
+
+            // 8. Seed PageViews (Simulated analytics for the last 30 days)
+            var pageViews = new List<PageView>();
+            var random = new Random();
+            var devices = new[] { "desktop", "mobile", "tablet" };
+            var locations = new[] { "Hà Nội", "TP. Hồ Chí Minh", "Đà Nẵng", "Nha Trang", "International (USA)", "International (Korea)", "International (Japan)" };
+
+            for (int i = 0; i < 300; i++)
+            {
+                // Seed views for Ha Long (1)
+                pageViews.Add(new PageView
+                {
+                    DestinationId = 1,
+                    Timestamp = DateTime.UtcNow.AddDays(-random.Next(0, 30)).AddHours(-random.Next(0, 24)),
+                    IpAddress = $"192.168.1.{random.Next(1, 254)}",
+                    UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64)...",
+                    DeviceType = devices[random.Next(devices.Length)],
+                    RegionName = locations[random.Next(locations.Length)]
+                });
+
+                // Seed views for Sapa (2)
+                if (i % 4 != 0) // slightly fewer views for sapa
+                {
+                    pageViews.Add(new PageView
+                    {
+                        DestinationId = 2,
+                        Timestamp = DateTime.UtcNow.AddDays(-random.Next(0, 30)).AddHours(-random.Next(0, 24)),
+                        IpAddress = $"172.16.5.{random.Next(1, 254)}",
+                        UserAgent = "Mozilla/5.0 (iPhone; CPU iPhone OS 15_4 like Mac OS X)...",
+                        DeviceType = devices[random.Next(devices.Length)],
+                        RegionName = locations[random.Next(locations.Length)]
+                    });
+                }
+
+                // Seed views for Hoi An (3)
+                if (i % 5 != 0) // slightly fewer views for hoian
+                {
+                    pageViews.Add(new PageView
+                    {
+                        DestinationId = 3,
+                        Timestamp = DateTime.UtcNow.AddDays(-random.Next(0, 30)).AddHours(-random.Next(0, 24)),
+                        IpAddress = $"10.0.0.{random.Next(1, 254)}",
+                        UserAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15)...",
+                        DeviceType = devices[random.Next(devices.Length)],
+                        RegionName = locations[random.Next(locations.Length)]
+                    });
+                }
+            }
+
+            context.PageViews.AddRange(pageViews);
+            context.SaveChanges();
+        }
+    }
+}

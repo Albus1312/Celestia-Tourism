@@ -1,0 +1,95 @@
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+
+async function request(endpoint, options = {}) {
+  const token = localStorage.getItem('celestia_token');
+  const headers = {
+    'Content-Type': 'application/json',
+    ...options.headers,
+  };
+
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const config = {
+    ...options,
+    headers,
+  };
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, config);
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `API request failed with status ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`[API ERROR] ${endpoint}:`, error);
+    throw error;
+  }
+}
+
+export const api = {
+  // Auth Operations
+  auth: {
+    login: (username, password) => 
+      request('/auth/login', {
+        method: 'POST',
+        body: JSON.stringify({ username, password })
+      }),
+    register: (registerData) => 
+      request('/auth/register', {
+        method: 'POST',
+        body: JSON.stringify(registerData)
+      }),
+    logout: () => 
+      request('/auth/logout', {
+        method: 'POST'
+      }),
+  },
+
+  // Destinations Engine
+  destinations: {
+    list: (params = {}) => {
+      const query = new URLSearchParams();
+      if (params.search) query.append('search', params.search);
+      if (params.category) query.append('category', params.category);
+      if (params.region) query.append('region', params.region);
+      if (params.province) query.append('province', params.province);
+      
+      const queryString = query.toString();
+      return request(`/destinations${queryString ? `?${queryString}` : ''}`);
+    },
+    
+    get: (idOrSlug) => request(`/destinations/${idOrSlug}`),
+    
+    addReview: (id, reviewData) => 
+      request(`/destinations/${id}/reviews`, {
+        method: 'POST',
+        body: JSON.stringify(reviewData)
+      }),
+      
+    getMetadata: () => request('/destinations/meta'),
+  },
+
+  // Landing Page Configuration (Visual Builder)
+  landingPage: {
+    getConfig: (destinationId) => request(`/landingpage/${destinationId}`),
+    
+    saveConfig: (destinationId, configData) => 
+      request(`/landingpage/${destinationId}`, {
+        method: 'POST',
+        body: JSON.stringify(configData)
+      }),
+      
+    getThemes: () => request('/landingpage/themes'),
+  },
+
+  // Analytics
+  analytics: {
+    getOverview: () => request('/analytics/overview'),
+  },
+  
+  // Health check
+  getHealth: () => request('/health').catch(() => ({ status: "Offline" }))
+};
