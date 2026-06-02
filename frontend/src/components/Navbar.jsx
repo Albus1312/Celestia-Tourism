@@ -93,7 +93,7 @@ export const Navbar = () => {
                 Trang Chủ
               </Link>
             </li>
-            {user && (
+            {user && (user.role === 'Admin' || user.role === 'Editor') && (
               <li>
                 <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}>
                   <LayoutDashboard size={16} style={{ verticalAlign: 'middle', marginRight: '6px' }} />

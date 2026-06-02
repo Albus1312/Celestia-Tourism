@@ -9,8 +9,8 @@ import {
 export const AdminDashboard = () => {
   const { user } = useAuth();
   
-  // Dashboard navigation states
-  const [activeTab, setActiveTab] = useState('analytics'); // 'analytics' | 'builder'
+  // Dashboard navigation states - Editor defaults directly to builder workspace
+  const [activeTab, setActiveTab] = useState(user?.role === 'Editor' ? 'builder' : 'analytics'); // 'analytics' | 'builder'
   
   // Analytics State
   const [analytics, setAnalytics] = useState(null);
@@ -29,9 +29,11 @@ export const AdminDashboard = () => {
   const [expandedSectionId, setExpandedSectionId] = useState(null);
 
   useEffect(() => {
-    fetchAnalytics();
+    if (user?.role === 'Admin') {
+      fetchAnalytics();
+    }
     fetchBuilderMeta();
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     if (selectedDestId) {
@@ -206,13 +208,15 @@ export const AdminDashboard = () => {
           <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Báo cáo tiến độ: <strong>Celestia v1.0</strong></p>
         </div>
 
-        <button 
-          onClick={() => setActiveTab('analytics')}
-          className={`admin-menu-item ${activeTab === 'analytics' ? 'active' : ''}`}
-        >
-          <BarChart3 size={16} />
-          Báo Cáo Tiến Độ
-        </button>
+        {user?.role === 'Admin' && (
+          <button 
+            onClick={() => setActiveTab('analytics')}
+            className={`admin-menu-item ${activeTab === 'analytics' ? 'active' : ''}`}
+          >
+            <BarChart3 size={16} />
+            Báo Cáo Tiến Độ
+          </button>
+        )}
 
         <button 
           onClick={() => setActiveTab('builder')}
@@ -226,8 +230,19 @@ export const AdminDashboard = () => {
       {/* Main Admin Panels Body */}
       <main className="admin-body">
         
+        {/* ACCESS DENIED FOR NON-ADMINS */}
+        {activeTab === 'analytics' && user?.role !== 'Admin' && (
+          <div className="glass-panel" style={{ padding: '48px', borderRadius: '16px', border: '1px solid var(--border-color)', textAlign: 'center', margin: '40px auto', maxWidth: '600px' }}>
+            <AlertTriangle size={48} style={{ color: '#ef4444', marginBottom: '20px', marginInline: 'auto' }} />
+            <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>Quyền Hạn Hạn Chế</h3>
+            <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
+              Vai trò của bạn là <strong style={{ color: 'var(--accent)' }}>Editor</strong>. Bạn chỉ có quyền truy cập vào mục <strong>Visual Page Builder</strong> để hiệu chỉnh nội dung và giao diện Landing Page, không thể xem các biểu đồ phân tích thống kê lưu lượng hệ thống.
+            </p>
+          </div>
+        )}
+
         {/* PANEL A: ANALYTICS COCKPIT */}
-        {activeTab === 'analytics' && (
+        {activeTab === 'analytics' && user?.role === 'Admin' && (
           <div>
             <div style={{ marginBottom: '32px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: '800', marginBottom: '8px' }}>Báo Cáo Tiến Độ Hệ Thống</h2>
