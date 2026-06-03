@@ -165,4 +165,7 @@ app.MapGet("/api/health", () => new {
     timestamp = DateTime.UtcNow 
 });
 
+// Redirect root to Swagger UI for better UX
+app.MapGet("/", () => Results.Redirect("/swagger/index.html"));
+
 app.Run();

@@ -46,3 +46,4 @@ D:\Celestia\backend\Celestia.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protoc
 D:\Celestia\backend\Celestia.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\Celestia\backend\Celestia.Api\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 D:\Celestia\backend\Celestia.Api\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+D:\Celestia\backend\Celestia.Api\obj\Debug\net8.0\Celestia.Api.sourcelink.json
