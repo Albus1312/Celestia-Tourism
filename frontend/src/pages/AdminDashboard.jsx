@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { api, API_BASE_URL } from '../services/api';
 import { 
   BarChart3, Settings, Eye, MessageSquare, Star, Palette, Type, Heading, Image, 
-  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2, Coffee, Users
+  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2, Coffee, Users, Trash2, Plus
 } from 'lucide-react';
 import DestinationManager from '../components/admin/DestinationManager';
 import ServiceManager from '../components/admin/ServiceManager';
