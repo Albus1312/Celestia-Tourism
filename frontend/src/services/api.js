@@ -1,5 +1,5 @@
 const VITE_API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
-const API_BASE_URL = VITE_API_URL.endsWith('/api') 
+export const API_BASE_URL = VITE_API_URL.endsWith('/api') 
   ? VITE_API_URL 
   : (VITE_API_URL.endsWith('/') ? `${VITE_API_URL}api` : `${VITE_API_URL}/api`);
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { api } from '../services/api';
+import { api, API_BASE_URL } from '../services/api';
 import { 
   BarChart3, Settings, Eye, MessageSquare, Star, Palette, Type, Heading, Image, 
   ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2
@@ -104,7 +104,7 @@ export const AdminDashboard = () => {
     try {
       setUploadingImage(true);
       const res = await api.upload.image(file);
-      const url = api.defaults?.baseURL ? api.defaults.baseURL.replace('/api', '') + res.url : 'http://localhost:5000' + res.url;
+      const url = API_BASE_URL.replace('/api', '') + res.url;
       handleConfigChange('heroImageUrl', url);
     } catch (err) {
       alert('Lỗi upload ảnh: ' + err.message);

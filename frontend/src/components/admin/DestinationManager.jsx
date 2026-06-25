@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plus, Edit2, Trash2, Image as ImageIcon, MapPin, Loader2 } from 'lucide-react';
-import { api } from '../../services/api';
+import { api, API_BASE_URL } from '../../services/api';
 
 const DestinationManager = () => {
   const [destinations, setDestinations] = useState([]);
@@ -48,7 +48,8 @@ const DestinationManager = () => {
     try {
       setUploadingImage(field);
       const res = await api.upload.image(file);
-      setFormData(prev => ({ ...prev, [field]: api.defaults?.baseURL ? api.defaults.baseURL.replace('/api', '') + res.url : 'http://localhost:5000' + res.url }));
+      const absoluteUrl = API_BASE_URL.replace('/api', '') + res.url;
+      setFormData(prev => ({ ...prev, [field]: absoluteUrl }));
     } catch (err) {
       alert('Lỗi upload ảnh: ' + err.message);
     } finally {
