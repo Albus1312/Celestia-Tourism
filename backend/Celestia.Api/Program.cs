@@ -151,6 +151,7 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.UseStaticFiles();
 app.UseCors("AllowViteClient");
 
 app.UseAuthentication();

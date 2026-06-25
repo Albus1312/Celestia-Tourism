@@ -3,8 +3,9 @@ import { useAuth } from '../context/AuthContext';
 import { api } from '../services/api';
 import { 
   BarChart3, Settings, Eye, MessageSquare, Star, Palette, Type, Heading, Image, 
-  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet
+  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2
 } from 'lucide-react';
+import DestinationManager from '../components/admin/DestinationManager';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
@@ -24,6 +25,7 @@ export const AdminDashboard = () => {
   const [builderLoading, setBuilderLoading] = useState(false);
   const [builderSuccess, setBuilderSuccess] = useState(false);
   const [builderError, setBuilderError] = useState('');
+  const [uploadingImage, setUploadingImage] = useState(false);
 
   // Active Section accordion in builder
   const [expandedSectionId, setExpandedSectionId] = useState(null);
@@ -94,6 +96,21 @@ export const AdminDashboard = () => {
       ...prev,
       [field]: value
     }));
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    try {
+      setUploadingImage(true);
+      const res = await api.upload.image(file);
+      const url = api.defaults?.baseURL ? api.defaults.baseURL.replace('/api', '') + res.url : 'http://localhost:5000' + res.url;
+      handleConfigChange('heroImageUrl', url);
+    } catch (err) {
+      alert('Lỗi upload ảnh: ' + err.message);
+    } finally {
+      setUploadingImage(false);
+    }
   };
 
   const handleSectionChange = (sectionId, field, value) => {
@@ -209,13 +226,22 @@ export const AdminDashboard = () => {
         </div>
 
         {user?.role === 'Admin' && (
-          <button 
-            onClick={() => setActiveTab('analytics')}
-            className={`admin-menu-item ${activeTab === 'analytics' ? 'active' : ''}`}
-          >
-            <BarChart3 size={16} />
-            Báo Cáo Tiến Độ
-          </button>
+          <>
+            <button 
+              onClick={() => setActiveTab('analytics')}
+              className={`admin-menu-item ${activeTab === 'analytics' ? 'active' : ''}`}
+            >
+              <BarChart3 size={16} />
+              Báo Cáo Tiến Độ
+            </button>
+            <button 
+              onClick={() => setActiveTab('masterdata')}
+              className={`admin-menu-item ${activeTab === 'masterdata' ? 'active' : ''}`}
+            >
+              <Database size={16} />
+              Quản lý Địa điểm
+            </button>
+          </>
         )}
 
         <button 
@@ -231,14 +257,19 @@ export const AdminDashboard = () => {
       <main className="admin-body">
         
         {/* ACCESS DENIED FOR NON-ADMINS */}
-        {activeTab === 'analytics' && user?.role !== 'Admin' && (
+        {(activeTab === 'analytics' || activeTab === 'masterdata') && user?.role !== 'Admin' && (
           <div className="glass-panel" style={{ padding: '48px', borderRadius: '16px', border: '1px solid var(--border-color)', textAlign: 'center', margin: '40px auto', maxWidth: '600px' }}>
             <AlertTriangle size={48} style={{ color: '#ef4444', marginBottom: '20px', marginInline: 'auto' }} />
             <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>Quyền Hạn Hạn Chế</h3>
             <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
-              Vai trò của bạn là <strong style={{ color: 'var(--accent)' }}>Editor</strong>. Bạn chỉ có quyền truy cập vào mục <strong>Visual Page Builder</strong> để hiệu chỉnh nội dung và giao diện Landing Page, không thể xem các biểu đồ phân tích thống kê lưu lượng hệ thống.
+              Vai trò của bạn là <strong style={{ color: 'var(--accent)' }}>Editor</strong>. Bạn chỉ có quyền truy cập vào mục <strong>Visual Page Builder</strong> để hiệu chỉnh nội dung và giao diện Landing Page, không thể xem mục này.
             </p>
           </div>
+        )}
+
+        {/* PANEL: MASTER DATA */}
+        {activeTab === 'masterdata' && user?.role === 'Admin' && (
+          <DestinationManager />
         )}
 
         {/* PANEL A: ANALYTICS COCKPIT */}
@@ -575,12 +606,20 @@ export const AdminDashboard = () => {
 
                     <div className="form-group">
                       <label style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><Image size={13} /> Link ảnh nền bìa (Cover URL)</label>
-                      <input 
-                        type="text" 
-                        className="form-input" 
-                        value={builderConfig.heroImageUrl || ''}
-                        onChange={(e) => handleConfigChange('heroImageUrl', e.target.value)}
-                      />
+                      <div style={{ display: 'flex', gap: '10px' }}>
+                        <input 
+                          type="text" 
+                          className="form-input" 
+                          style={{ flex: 1 }}
+                          value={builderConfig.heroImageUrl || ''}
+                          onChange={(e) => handleConfigChange('heroImageUrl', e.target.value)}
+                        />
+                        <label style={{ cursor: 'pointer', background: 'var(--accent)', color: 'white', padding: '8px 12px', borderRadius: '8px', display: 'flex', alignItems: 'center', gap: '5px' }}>
+                          {uploadingImage ? <Loader2 size={16} className="animate-spin" /> : <Image size={16} />}
+                          Tải lên
+                          <input type="file" hidden accept="image/*" onChange={handleImageUpload} />
+                        </label>
+                      </div>
                     </div>
                   </div>
 

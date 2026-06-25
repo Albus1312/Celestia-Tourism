@@ -5,6 +5,7 @@ using Celestia.Api.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Celestia.Api.Controllers
 {
@@ -235,6 +236,86 @@ namespace Celestia.Api.Controllers
             }).ToListAsync();
 
             return Ok(new { categories, regions, provinces });
+        }
+        // POST: api/destinations
+        [HttpPost]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> CreateDestination([FromBody] CreateDestinationDto dto)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            var dest = new Destination
+            {
+                Name = dto.Name,
+                Slug = dto.Slug,
+                Description = dto.Description,
+                DetailedDescription = dto.DetailedDescription,
+                Location = dto.Location,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude,
+                ProvinceId = dto.ProvinceId,
+                CategoryId = dto.CategoryId,
+                ThumbnailUrl = dto.ThumbnailUrl,
+                CoverUrl = dto.CoverUrl,
+                Rating = 0,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.Destinations.Add(dest);
+            await _context.SaveChangesAsync();
+
+            // Create an empty landing page config automatically
+            var config = new LandingPageConfig
+            {
+                DestinationId = dest.Id,
+                ThemeId = "ocean-breeze",
+                HeroTitle = dto.Name,
+                HeroSubtitle = dto.Description,
+                HeroImageUrl = dto.CoverUrl
+            };
+            _context.LandingPageConfigs.Add(config);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetDestination), new { idOrSlug = dest.Id.ToString() }, new { id = dest.Id, slug = dest.Slug });
+        }
+
+        // PUT: api/destinations/{id}
+        [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UpdateDestination(int id, [FromBody] UpdateDestinationDto dto)
+        {
+            var dest = await _context.Destinations.FindAsync(id);
+            if (dest == null) return NotFound(new { message = "Không tìm thấy địa điểm!" });
+
+            dest.Name = dto.Name;
+            dest.Slug = dto.Slug;
+            dest.Description = dto.Description;
+            dest.DetailedDescription = dto.DetailedDescription;
+            dest.Location = dto.Location;
+            dest.Latitude = dto.Latitude;
+            dest.Longitude = dto.Longitude;
+            dest.ProvinceId = dto.ProvinceId;
+            dest.CategoryId = dto.CategoryId;
+            dest.ThumbnailUrl = dto.ThumbnailUrl;
+            dest.CoverUrl = dto.CoverUrl;
+
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Cập nhật thành công!" });
+        }
+
+        // DELETE: api/destinations/{id}
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteDestination(int id)
+        {
+            var dest = await _context.Destinations.FindAsync(id);
+            if (dest == null) return NotFound(new { message = "Không tìm thấy địa điểm!" });
+
+            _context.Destinations.Remove(dest);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { message = "Đã xóa địa điểm thành công!" });
         }
     }
 }

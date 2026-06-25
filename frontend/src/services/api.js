@@ -32,6 +32,33 @@ async function request(endpoint, options = {}) {
   }
 }
 
+async function uploadFile(endpoint, file) {
+  const token = localStorage.getItem('celestia_token');
+  const headers = {};
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
+      headers,
+      body: formData,
+    });
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new Error(errorData.message || `API request failed with status ${response.status}`);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(`[UPLOAD ERROR] ${endpoint}:`, error);
+    throw error;
+  }
+}
+
 export const api = {
   // Auth Operations
   auth: {
@@ -66,6 +93,20 @@ export const api = {
     
     get: (idOrSlug) => request(`/destinations/${idOrSlug}`),
     
+    create: (data) => request('/destinations', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
+
+    update: (id, data) => request(`/destinations/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(data)
+    }),
+
+    delete: (id) => request(`/destinations/${id}`, {
+      method: 'DELETE'
+    }),
+    
     addReview: (id, reviewData) => 
       request(`/destinations/${id}/reviews`, {
         method: 'POST',
@@ -94,5 +135,10 @@ export const api = {
   },
   
   // Health check
-  getHealth: () => request('/health').catch(() => ({ status: "Offline" }))
+  getHealth: () => request('/health').catch(() => ({ status: "Offline" })),
+
+  // File Upload
+  upload: {
+    image: (file) => uploadFile('/upload', file),
+  }
 };

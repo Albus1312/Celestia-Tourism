@@ -133,4 +133,23 @@ namespace Celestia.Api.Models
         public int ReviewsCount { get; set; }
         public double Rating { get; set; }
     }
+
+    public class CreateDestinationDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Slug { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string DetailedDescription { get; set; } = string.Empty;
+        public string Location { get; set; } = string.Empty;
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public string ProvinceId { get; set; } = string.Empty;
+        public int CategoryId { get; set; }
+        public string ThumbnailUrl { get; set; } = string.Empty;
+        public string CoverUrl { get; set; } = string.Empty;
+    }
+
+    public class UpdateDestinationDto : CreateDestinationDto
+    {
+    }
 }
