@@ -30,10 +30,10 @@ const ServiceManager = () => {
       setLoading(true);
       const [svcRes, destRes] = await Promise.all([
         api.services.getAll({ limit: 100 }),
-        api.destinations.getAll({ limit: 100 })
+        api.destinations.list({ limit: 100 })
       ]);
       setServices(svcRes.data);
-      setDestinations(destRes.data);
+      setDestinations(destRes);
     } catch (err) {
       console.error(err);
       alert('Lỗi khi tải dữ liệu');

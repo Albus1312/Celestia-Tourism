@@ -129,6 +129,23 @@ export const api = {
     getThemes: () => request('/landingpage/themes'),
   },
 
+  // Local Services
+  services: {
+    getAll: (params) => {
+      const qs = new URLSearchParams();
+      if (params?.type) qs.append('type', params.type);
+      if (params?.search) qs.append('search', params.search);
+      if (params?.page) qs.append('page', params.page);
+      if (params?.limit) qs.append('limit', params.limit);
+      if (params?.destinationId) qs.append('destinationId', params.destinationId);
+      return request(`/services?${qs.toString()}`);
+    },
+    getById: (id) => request(`/services/${id}`),
+    create: (data) => request('/services', { method: 'POST', body: JSON.stringify(data) }),
+    update: (id, data) => request(`/services/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
+    delete: (id) => request(`/services/${id}`, { method: 'DELETE' }),
+  },
+
   // Analytics
   analytics: {
     getOverview: () => request('/analytics/overview'),
