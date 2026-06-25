@@ -14,6 +14,7 @@ const IconMap = {
 export const LandingPage = () => {
   const { id } = useParams();
   const [destination, setDestination] = useState(null);
+  const [localServices, setLocalServices] = useState([]);
   const [config, setConfig] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -45,6 +46,10 @@ export const LandingPage = () => {
       // 2. Fetch Dynamic Landing Page layout and styling config
       const configData = await api.landingPage.getConfig(destData.id);
       setConfig(configData);
+
+      // 3. Fetch Local Services for this destination
+      const svcData = await api.services.getAll({ destinationId: destData.id, limit: 100 });
+      setLocalServices(svcData.data || []);
     } catch (err) {
       console.error('Failed to load landing page database:', err);
       setError('Không thể tải cấu hình Landing Page cho địa danh này.');
@@ -425,6 +430,45 @@ export const LandingPage = () => {
           </div>
         </div>
       </section>
+
+      {/* NEW: Local Services Section */}
+      {localServices.length > 0 && (
+        <section className="theme-section" style={{ background: 'var(--bg-secondary)', padding: '60px 0' }}>
+          <div className="container">
+            <h2 className="section-title">Dịch vụ & Tiện ích tại {destination.name}</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
+              {localServices.map(svc => (
+                <div key={svc.id} style={{ background: 'var(--bg-primary)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
+                  <div style={{ height: '160px', background: '#e2e8f0', backgroundImage: `url(${svc.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
+                  <div style={{ padding: '20px' }}>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
+                      <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: 0 }}>{svc.name}</h3>
+                      <span style={{ 
+                        padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600',
+                        background: svc.type === 'Homestay' ? '#fdf4ff' : svc.type === 'Restaurant' ? '#fffbeb' : '#f0fdfa',
+                        color: svc.type === 'Homestay' ? '#c026d3' : svc.type === 'Restaurant' ? '#d97706' : '#0d9488'
+                      }}>
+                        {svc.type === 'Homestay' ? 'Lưu trú' : svc.type === 'Restaurant' ? 'Ăn uống' : 'Di chuyển'}
+                      </span>
+                    </div>
+                    <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px' }}>{svc.description}</p>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
+                      {svc.address && <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14} /> {svc.address}</div>}
+                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#eab308', fontWeight: 'bold' }}>
+                          <Star size={14} fill="#eab308" /> {svc.rating}
+                        </div>
+                        {svc.phone && <strong style={{ color: 'var(--accent)' }}>{svc.phone}</strong>}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
     </div>
   );
 };

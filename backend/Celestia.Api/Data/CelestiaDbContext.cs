@@ -21,6 +21,7 @@ namespace Celestia.Api.Data
         public DbSet<PasswordResetToken> PasswordResetTokens => Set<PasswordResetToken>();
         public DbSet<Review> Reviews => Set<Review>();
         public DbSet<PageView> PageViews => Set<PageView>();
+        public DbSet<LocalService> LocalServices => Set<LocalService>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -51,6 +52,13 @@ namespace Celestia.Api.Data
                 .HasOne(d => d.Province)
                 .WithMany(p => p.Destinations)
                 .HasForeignKey(d => d.ProvinceId);
+
+            // Configure LocalService-Destination relationship
+            modelBuilder.Entity<LocalService>()
+                .HasOne(s => s.Destination)
+                .WithMany()
+                .HasForeignKey(s => s.DestinationId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             // Configure Category-Destination relationship
             modelBuilder.Entity<Destination>()

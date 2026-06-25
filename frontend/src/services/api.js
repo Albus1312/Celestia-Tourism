@@ -137,8 +137,20 @@ export const api = {
   // Health check
   getHealth: () => request('/health').catch(() => ({ status: "Offline" })),
 
+  // Users
+  users: {
+    getAll: (params) => {
+      const qs = new URLSearchParams();
+      if (params?.search) qs.append('search', params.search);
+      if (params?.page) qs.append('page', params.page);
+      if (params?.limit) qs.append('limit', params.limit);
+      return request(`/users?${qs.toString()}`);
+    },
+    delete: (id) => request(`/users/${id}`, { method: 'DELETE' }),
+  },
+
   // File Upload
   upload: {
-    image: (file) => uploadFile('/upload', file),
+    image: (file) => uploadFile('/upload/image', file),
   }
 };

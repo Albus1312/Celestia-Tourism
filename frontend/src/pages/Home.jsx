@@ -212,7 +212,7 @@ export const Home = () => {
 
             <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
               <div className="search-input-wrapper">
-                <Search />
+                <Search size={18} style={{ color: '#64748b', marginRight: '8px' }} />
                 <input 
                   type="text" 
                   className="search-input"
@@ -222,6 +222,31 @@ export const Home = () => {
                   onKeyDown={handleSearchKeyDown}
                 />
               </div>
+
+              {/* Dropdown Filters */}
+              <select 
+                className="form-input" 
+                style={{ width: 'auto', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '30px', padding: '10px 20px' }}
+                value={activeRegion || ''}
+                onChange={(e) => handleSelectRegion(e.target.value || null)}
+              >
+                <option value="" style={{ color: 'black' }}>Tất cả các Miền</option>
+                {regions.map(r => (
+                  <option key={r.id} value={r.id} style={{ color: 'black' }}>{r.name}</option>
+                ))}
+              </select>
+
+              <select 
+                className="form-input" 
+                style={{ width: 'auto', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', color: 'white', borderRadius: '30px', padding: '10px 20px' }}
+                value={activeProvince || ''}
+                onChange={(e) => handleSelectProvince(e.target.value ? Number(e.target.value) : null)}
+              >
+                <option value="" style={{ color: 'black' }}>Tất cả Tỉnh/Thành</option>
+                {provinces.filter(p => !activeRegion || p.regionId === activeRegion).map(p => (
+                  <option key={p.id} value={p.id} style={{ color: 'black' }}>{p.name}</option>
+                ))}
+              </select>
 
               {(activeCategory || activeRegion || activeProvince || searchQuery) && (
                 <button onClick={resetAllFilters} className="btn btn-secondary" style={{ padding: '10px 14px', borderRadius: '30px' }}>

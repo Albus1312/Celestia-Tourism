@@ -152,4 +152,29 @@ namespace Celestia.Api.Models
     public class UpdateDestinationDto : CreateDestinationDto
     {
     }
+
+    public class LocalServiceDto
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public double Rating { get; set; }
+        public int DestinationId { get; set; }
+    }
+
+    public class CreateLocalServiceDto
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+        public string Phone { get; set; } = string.Empty;
+        public string ImageUrl { get; set; } = string.Empty;
+        public double Rating { get; set; }
+        public int DestinationId { get; set; }
+    }
 }

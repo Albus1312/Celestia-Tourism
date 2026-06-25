@@ -3,9 +3,11 @@ import { useAuth } from '../context/AuthContext';
 import { api, API_BASE_URL } from '../services/api';
 import { 
   BarChart3, Settings, Eye, MessageSquare, Star, Palette, Type, Heading, Image, 
-  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2
+  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2, Coffee, Users
 } from 'lucide-react';
 import DestinationManager from '../components/admin/DestinationManager';
+import ServiceManager from '../components/admin/ServiceManager';
+import UserManager from '../components/admin/UserManager';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
@@ -266,6 +268,20 @@ export const AdminDashboard = () => {
               <Database size={16} />
               Quản lý Địa điểm
             </button>
+            <button 
+              onClick={() => setActiveTab('services')}
+              className={`admin-menu-item ${activeTab === 'services' ? 'active' : ''}`}
+            >
+              <Coffee size={16} />
+              Quản lý Dịch vụ
+            </button>
+            <button 
+              onClick={() => setActiveTab('users')}
+              className={`admin-menu-item ${activeTab === 'users' ? 'active' : ''}`}
+            >
+              <Users size={16} />
+              Quản lý Tài khoản
+            </button>
           </>
         )}
 
@@ -282,7 +298,7 @@ export const AdminDashboard = () => {
       <main className="admin-body">
         
         {/* ACCESS DENIED FOR NON-ADMINS */}
-        {(activeTab === 'analytics' || activeTab === 'masterdata') && user?.role !== 'Admin' && (
+        {(activeTab === 'analytics' || activeTab === 'masterdata' || activeTab === 'services' || activeTab === 'users') && user?.role !== 'Admin' && (
           <div className="glass-panel" style={{ padding: '48px', borderRadius: '16px', border: '1px solid var(--border-color)', textAlign: 'center', margin: '40px auto', maxWidth: '600px' }}>
             <AlertTriangle size={48} style={{ color: '#ef4444', marginBottom: '20px', marginInline: 'auto' }} />
             <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>Quyền Hạn Hạn Chế</h3>
@@ -295,6 +311,16 @@ export const AdminDashboard = () => {
         {/* PANEL: MASTER DATA */}
         {activeTab === 'masterdata' && user?.role === 'Admin' && (
           <DestinationManager />
+        )}
+
+        {/* PANEL: SERVICES */}
+        {activeTab === 'services' && user?.role === 'Admin' && (
+          <ServiceManager />
+        )}
+
+        {/* PANEL: USERS */}
+        {activeTab === 'users' && user?.role === 'Admin' && (
+          <UserManager />
         )}
 
         {/* PANEL A: ANALYTICS COCKPIT */}
