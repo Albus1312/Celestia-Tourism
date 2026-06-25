@@ -85,6 +85,36 @@ namespace Celestia.Api.Data
             }
             context.SaveChanges();
 
+            if (context.Regions.Any() && context.LocalServices.Any())
+            {
+                return; // Database already seeded
+            }
+
+            // Seed Local Services separately if they don't exist yet (for existing DBs)
+            if (!context.LocalServices.Any())
+            {
+                var services = new List<LocalService>
+                {
+                    // Ha Long (ID 1)
+                    new LocalService { DestinationId = 1, Name = "Du thuyền Vịnh Hạ Long 5 Sao", Type = "Di chuyển", Description = "Trải nghiệm du thuyền ngắm cảnh hoàng hôn trên vịnh với phòng nghỉ sang trọng và bữa tối lãng mạn.", Address = "Cảng Tuần Châu, Hạ Long", Phone = "0901234567", ImageUrl = "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=600&q=80", Rating = 4.9, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 1, Name = "Hải Sản Hồng Hạnh", Type = "Nhà hàng", Description = "Nhà hàng hải sản tươi sống lớn nhất Hạ Long với view biển tuyệt đẹp.", Address = "Bãi Cháy, Hạ Long", Phone = "0987654321", ImageUrl = "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80", Rating = 4.6, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 1, Name = "Vinpearl Resort & Spa", Type = "Homestay", Description = "Khu nghỉ dưỡng cao cấp nằm hoàn toàn trên đảo Rều với hồ bơi vô cực và các dịch vụ spa.", Address = "Đảo Rều, Bãi Cháy, Hạ Long", Phone = "02033856888", ImageUrl = "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
+
+                    // Sa Pa (ID 2)
+                    new LocalService { DestinationId = 2, Name = "Pao's Sapa Leisure Hotel", Type = "Homestay", Description = "Khách sạn view thung lũng Mường Hoa siêu đẹp, thiết kế cảm hứng từ ruộng bậc thang.", Address = "Cuối đường Mường Hoa, Sa Pa", Phone = "02146253999", ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", Rating = 4.7, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 2, Name = "A Phủ Restaurant", Type = "Nhà hàng", Description = "Đặc sản Tây Bắc chuẩn vị: thắng cố, lẩu cá tầm, lợn bản quay giòn da.", Address = "15 Fansipan, Sa Pa", Phone = "0912345678", ImageUrl = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=600&q=80", Rating = 4.5, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 2, Name = "Cáp treo Fansipan Legend", Type = "Di chuyển", Description = "Hệ thống cáp treo 3 dây dài nhất thế giới đưa bạn lên đỉnh Fansipan - Nóc nhà Đông Dương.", Address = "Nguyễn Chí Thanh, Sa Pa", Phone = "02143818888", ImageUrl = "https://images.unsplash.com/photo-1572097561814-767bb1d97152?auto=format&fit=crop&w=600&q=80", Rating = 4.9, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 2, Name = "Sapa Eco-Home", Type = "Homestay", Description = "Homestay bằng gỗ ấm cúng nép mình trong bản Tả Van, mang đến trải nghiệm sống cùng người bản địa.", Address = "Bản Tả Van, Sa Pa", Phone = "0977888999", ImageUrl = "https://images.unsplash.com/photo-1499696803273-0985227d8db1?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
+
+                    // Hoi An (ID 3)
+                    new LocalService { DestinationId = 3, Name = "Bánh Mì Phượng", Type = "Nhà hàng", Description = "Tiệm bánh mì nổi tiếng thế giới được Anthony Bourdain khen ngợi.", Address = "2B Phan Châu Trinh, Hội An", Phone = "0905743773", ImageUrl = "https://images.unsplash.com/photo-1627308595229-7830b5c91f9f?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 3, Name = "Hoi An Silk Boutique", Type = "Homestay", Description = "Khách sạn boutique ngay sát rìa phố cổ, đi bộ ra chùa Cầu chỉ 5 phút.", Address = "14 Hùng Vương, Hội An", Phone = "02353919999", ImageUrl = "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80", Rating = 4.6, CreatedAt = DateTime.UtcNow },
+                    new LocalService { DestinationId = 3, Name = "Thuyền Mộc trên Sông Hoài", Type = "Di chuyển", Description = "Dịch vụ thuê thuyền gỗ chèo tay thả đèn hoa đăng lãng mạn vào ban đêm.", Address = "Bến thuyền sông Hoài, Hội An", Phone = "0934567890", ImageUrl = "https://images.unsplash.com/photo-1629807431221-a3f2a64724b4?auto=format&fit=crop&w=600&q=80", Rating = 4.7, CreatedAt = DateTime.UtcNow }
+                };
+                context.LocalServices.AddRange(services);
+                context.SaveChanges();
+            }
+
             if (context.Regions.Any())
             {
                 return; // Database already seeded
@@ -609,30 +639,6 @@ namespace Celestia.Api.Data
             context.Reviews.AddRange(reviews);
             context.SaveChanges();
 
-            // 8. Seed Local Services (Homestays, Restaurants, Transport)
-            if (!context.LocalServices.Any())
-            {
-                var services = new List<LocalService>
-                {
-                    // Ha Long (ID 1)
-                    new LocalService { DestinationId = 1, Name = "Du thuyền Vịnh Hạ Long 5 Sao", Type = "Di chuyển", Description = "Trải nghiệm du thuyền ngắm cảnh hoàng hôn trên vịnh với phòng nghỉ sang trọng và bữa tối lãng mạn.", Address = "Cảng Tuần Châu, Hạ Long", Phone = "0901234567", ImageUrl = "https://images.unsplash.com/photo-1548574505-5e239809ee19?auto=format&fit=crop&w=600&q=80", Rating = 4.9, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 1, Name = "Hải Sản Hồng Hạnh", Type = "Nhà hàng", Description = "Nhà hàng hải sản tươi sống lớn nhất Hạ Long với view biển tuyệt đẹp.", Address = "Bãi Cháy, Hạ Long", Phone = "0987654321", ImageUrl = "https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&w=600&q=80", Rating = 4.6, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 1, Name = "Vinpearl Resort & Spa", Type = "Homestay", Description = "Khu nghỉ dưỡng cao cấp nằm hoàn toàn trên đảo Rều với hồ bơi vô cực và các dịch vụ spa.", Address = "Đảo Rều, Bãi Cháy, Hạ Long", Phone = "02033856888", ImageUrl = "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
-
-                    // Sa Pa (ID 2)
-                    new LocalService { DestinationId = 2, Name = "Pao's Sapa Leisure Hotel", Type = "Homestay", Description = "Khách sạn view thung lũng Mường Hoa siêu đẹp, thiết kế cảm hứng từ ruộng bậc thang.", Address = "Cuối đường Mường Hoa, Sa Pa", Phone = "02146253999", ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=600&q=80", Rating = 4.7, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 2, Name = "A Phủ Restaurant", Type = "Nhà hàng", Description = "Đặc sản Tây Bắc chuẩn vị: thắng cố, lẩu cá tầm, lợn bản quay giòn da.", Address = "15 Fansipan, Sa Pa", Phone = "0912345678", ImageUrl = "https://images.unsplash.com/photo-1514933651103-005eec06c04b?auto=format&fit=crop&w=600&q=80", Rating = 4.5, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 2, Name = "Cáp treo Fansipan Legend", Type = "Di chuyển", Description = "Hệ thống cáp treo 3 dây dài nhất thế giới đưa bạn lên đỉnh Fansipan - Nóc nhà Đông Dương.", Address = "Nguyễn Chí Thanh, Sa Pa", Phone = "02143818888", ImageUrl = "https://images.unsplash.com/photo-1572097561814-767bb1d97152?auto=format&fit=crop&w=600&q=80", Rating = 4.9, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 2, Name = "Sapa Eco-Home", Type = "Homestay", Description = "Homestay bằng gỗ ấm cúng nép mình trong bản Tả Van, mang đến trải nghiệm sống cùng người bản địa.", Address = "Bản Tả Van, Sa Pa", Phone = "0977888999", ImageUrl = "https://images.unsplash.com/photo-1499696803273-0985227d8db1?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
-
-                    // Hoi An (ID 3)
-                    new LocalService { DestinationId = 3, Name = "Bánh Mì Phượng", Type = "Nhà hàng", Description = "Tiệm bánh mì nổi tiếng thế giới được Anthony Bourdain khen ngợi.", Address = "2B Phan Châu Trinh, Hội An", Phone = "0905743773", ImageUrl = "https://images.unsplash.com/photo-1627308595229-7830b5c91f9f?auto=format&fit=crop&w=600&q=80", Rating = 4.8, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 3, Name = "Hoi An Silk Boutique", Type = "Homestay", Description = "Khách sạn boutique ngay sát rìa phố cổ, đi bộ ra chùa Cầu chỉ 5 phút.", Address = "14 Hùng Vương, Hội An", Phone = "02353919999", ImageUrl = "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?auto=format&fit=crop&w=600&q=80", Rating = 4.6, CreatedAt = DateTime.UtcNow },
-                    new LocalService { DestinationId = 3, Name = "Thuyền Mộc trên Sông Hoài", Type = "Di chuyển", Description = "Dịch vụ thuê thuyền gỗ chèo tay thả đèn hoa đăng lãng mạn vào ban đêm.", Address = "Bến thuyền sông Hoài, Hội An", Phone = "0934567890", ImageUrl = "https://images.unsplash.com/photo-1629807431221-a3f2a64724b4?auto=format&fit=crop&w=600&q=80", Rating = 4.7, CreatedAt = DateTime.UtcNow }
-                };
-                context.LocalServices.AddRange(services);
-                context.SaveChanges();
-            }
 
             // 9. Seed PageViews (Simulated analytics for the last 30 days)
             var pageViews = new List<PageView>();
