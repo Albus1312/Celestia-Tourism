@@ -155,6 +155,31 @@ export const AdminDashboard = () => {
     });
   };
 
+  const addSection = () => {
+    const newSection = {
+      id: Math.random().toString(36).substr(2, 9),
+      sectionType: 'text',
+      title: 'Khối nội dung mới',
+      subtitle: '',
+      orderIndex: builderConfig.sections ? builderConfig.sections.length : 0,
+      parsedContent: {}
+    };
+    setBuilderConfig(prev => ({
+      ...prev,
+      sections: [...(prev.sections || []), newSection]
+    }));
+    setExpandedSectionId(newSection.id);
+  };
+
+  const deleteSection = (sectionId, e) => {
+    if (e) e.stopPropagation();
+    if (!window.confirm('Bạn có chắc muốn xóa khối này?')) return;
+    setBuilderConfig(prev => ({
+      ...prev,
+      sections: prev.sections.filter(sec => sec.id !== sectionId)
+    }));
+  };
+
   const moveSection = (index, direction) => {
     if (direction === 'up' && index === 0) return;
     if (direction === 'down' && index === builderConfig.sections.length - 1) return;
@@ -652,12 +677,31 @@ export const AdminDashboard = () => {
                             >
                               <ArrowDown size={14} />
                             </button>
+                            <button 
+                              onClick={(e) => deleteSection(sec.id, e)}
+                              style={{ padding: '2px', color: '#ef4444', marginLeft: '4px' }}
+                            >
+                              <Trash2 size={14} />
+                            </button>
                           </div>
                         </div>
 
-                        {/* Collapsible panel fields editing */}
                         {expandedSectionId === sec.id && (
                           <div className="section-builder-body">
+                            <div className="form-group">
+                              <label>Loại khối nội dung (Section Type)</label>
+                              <select 
+                                className="form-input"
+                                value={sec.sectionType || ''}
+                                onChange={(e) => handleSectionChange(sec.id, 'sectionType', e.target.value)}
+                              >
+                                <option value="text">Văn bản (Text/Intro)</option>
+                                <option value="gallery">Thư viện ảnh (Gallery)</option>
+                                <option value="video">Video</option>
+                                <option value="stats">Thống kê (Stats)</option>
+                              </select>
+                            </div>
+
                             <div className="form-group">
                               <label>Tiêu đề khối</label>
                               <input 
@@ -746,6 +790,14 @@ export const AdminDashboard = () => {
                         )}
                       </div>
                     ))}
+                    
+                    <button 
+                      onClick={addSection}
+                      className="action-button primary" 
+                      style={{ marginTop: '12px', justifyContent: 'center' }}
+                    >
+                      <Plus size={16} /> Thêm Khối Nội Dung Mới
+                    </button>
                   </div>
 
                   {/* 6. Save Configuration Buttons */}
