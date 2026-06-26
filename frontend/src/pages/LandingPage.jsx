@@ -5,6 +5,7 @@ import {
   ArrowLeft, Star, Send, ShieldCheck, User, Search,
   Ship, Compass, Flame, Wind, Navigation, MapPin, Utensils, Sparkles, Coffee, PenTool, Globe, Calendar
 } from 'lucide-react';
+import { TourBookingModal } from '../components/Booking/TourBookingModal';
 
 // Maps string icons from seed to lucide components
 const IconMap = {
@@ -25,6 +26,9 @@ export const LandingPage = () => {
   const [comment, setComment] = useState('');
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewSuccess, setReviewSuccess] = useState(false);
+
+  // Booking Modal State
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
   // CTA Form States
   const [ctaName, setCtaName] = useState('');
@@ -319,12 +323,23 @@ export const LandingPage = () => {
             <User size={20} color="var(--secondary)" />
             <input type="text" placeholder="Số khách" defaultValue="2 Người lớn" />
           </div>
-          <button className="booking-btn">
+          <button 
+            className="booking-btn"
+            onClick={() => setShowBookingModal(true)}
+          >
             <Search size={18} />
             Tìm Chuyến Đi
           </button>
         </div>
       </div>
+
+      {/* Booking Modal Overlay */}
+      {showBookingModal && (
+        <TourBookingModal 
+          destination={destination}
+          onClose={() => setShowBookingModal(false)}
+        />
+      )}
 
       {/* 3. Ordered Configuration Layout Sections */}
       {config.sections && config.sections.map(section => renderSection(section))}

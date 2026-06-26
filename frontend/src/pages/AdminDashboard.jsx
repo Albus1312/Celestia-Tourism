@@ -13,6 +13,7 @@ import DestinationManager from '../components/admin/DestinationManager';
 import ServiceManager from '../components/admin/ServiceManager';
 import UserManager from '../components/admin/UserManager';
 import ArticleManager from '../components/admin/ArticleManager';
+import TourManager from '../components/admin/TourManager';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
@@ -287,6 +288,13 @@ export const AdminDashboard = () => {
               <Users size={16} />
               Quản lý Tài khoản
             </button>
+            <button 
+              onClick={() => setActiveTab('tours')}
+              className={`admin-menu-item ${activeTab === 'tours' ? 'active' : ''}`}
+            >
+              <Navigation size={16} />
+              Quản lý Tour Đặt Chỗ
+            </button>
           </>
         )}
 
@@ -334,6 +342,11 @@ export const AdminDashboard = () => {
         {/* PANEL: USERS */}
         {activeTab === 'users' && user?.role === 'Admin' && (
           <UserManager />
+        )}
+
+        {/* PANEL: TOURS */}
+        {activeTab === 'tours' && user?.role === 'Admin' && (
+          <TourManager />
         )}
 
         {/* PANEL: ARTICLES */}
