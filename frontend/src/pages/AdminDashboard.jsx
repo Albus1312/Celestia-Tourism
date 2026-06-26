@@ -247,9 +247,9 @@ export const AdminDashboard = () => {
     <div className="admin-container">
       {/* Sidebar Controls */}
       <aside className="admin-sidebar">
-        <div style={{ padding: '0 16px 20px 16px', borderBottom: '1px solid rgba(255,255,255,0.05)', marginBottom: '20px' }}>
-          <h4 style={{ fontSize: '13px', color: '#64748b', textTransform: 'uppercase', letterSpacing: '1px' }}>Phân Hệ Admin</h4>
-          <p style={{ fontSize: '11px', color: '#94a3b8', marginTop: '4px' }}>Báo cáo tiến độ: <strong>Celestia v1.0</strong></p>
+        <div style={{ padding: '0 16px 20px 16px', borderBottom: '1px solid var(--border-color)', marginBottom: '20px' }}>
+          <h4 style={{ fontSize: '13px', color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px' }}>Phân Hệ Admin</h4>
+          <p style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>Báo cáo tiến độ: <strong>Celestia v1.0</strong></p>
         </div>
 
         {user?.role === 'Admin' && (
@@ -302,7 +302,7 @@ export const AdminDashboard = () => {
           <div className="glass-panel" style={{ padding: '48px', borderRadius: '16px', border: '1px solid var(--border-color)', textAlign: 'center', margin: '40px auto', maxWidth: '600px' }}>
             <AlertTriangle size={48} style={{ color: '#ef4444', marginBottom: '20px', marginInline: 'auto' }} />
             <h3 style={{ fontSize: '20px', fontWeight: '800', marginBottom: '8px' }}>Quyền Hạn Hạn Chế</h3>
-            <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: '1.6' }}>
+            <p style={{ color: 'var(--text-secondary)', fontSize: '14px', lineHeight: '1.6' }}>
               Vai trò của bạn là <strong style={{ color: 'var(--accent)' }}>Editor</strong>. Bạn chỉ có quyền truy cập vào mục <strong>Visual Page Builder</strong> để hiệu chỉnh nội dung và giao diện Landing Page, không thể xem mục này.
             </p>
           </div>
@@ -328,7 +328,7 @@ export const AdminDashboard = () => {
           <div>
             <div style={{ marginBottom: '32px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: '800', marginBottom: '8px' }}>Báo Cáo Tiến Độ Hệ Thống</h2>
-              <p style={{ color: '#94a3b8' }}>Số liệu trực quan hóa lưu lượng và mức độ tương tác trực tiếp của người dùng.</p>
+              <p style={{ color: 'var(--text-secondary)' }}>Số liệu trực quan hóa lưu lượng và mức độ tương tác trực tiếp của người dùng.</p>
             </div>
 
             {analyticsLoading ? (
@@ -378,7 +378,7 @@ export const AdminDashboard = () => {
                   <div className="chart-card">
                     <div className="chart-header">
                       <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Biểu Đồ Lưu Lượng (30 Ngày Qua)</h3>
-                      <span style={{ fontSize: '12px', color: '#64748b' }}>Đơn vị: Lượt truy cập / ngày</span>
+                      <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Đơn vị: Lượt truy cập / ngày</span>
                     </div>
 
                     <div className="chart-container">
@@ -437,13 +437,13 @@ export const AdminDashboard = () => {
                       </div>
                     </div>
 
-                    <div style={{ borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
+                    <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '16px' }}>
                       <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '12px' }}>Khu Vực Truy Cập Phổ Biến</h3>
                       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
                         {analytics.regionDistribution.map((item, idx) => (
                           <div key={idx} style={{
                             fontSize: '12px',
-                            background: 'rgba(255,255,255,0.03)',
+                            background: 'var(--border-color-hover)',
                             border: '1px solid var(--border-color)',
                             padding: '6px 12px',
                             borderRadius: '30px'
@@ -461,7 +461,7 @@ export const AdminDashboard = () => {
                   <h3 style={{ fontSize: '18px', fontWeight: '700', marginBottom: '20px' }}>Hiệu Suất Địa Danh Nổi Bật</h3>
                   <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px', textAlign: 'left' }}>
                     <thead>
-                      <tr style={{ borderBottom: '1px solid var(--border-color)', color: '#64748b' }}>
+                      <tr style={{ borderBottom: '1px solid var(--border-color)', color: 'var(--text-muted)' }}>
                         <th style={{ padding: '12px 16px' }}>Tên địa danh</th>
                         <th style={{ padding: '12px 16px' }}>Tổng Views</th>
                         <th style={{ padding: '12px 16px' }}>Bình luận</th>
@@ -471,7 +471,7 @@ export const AdminDashboard = () => {
                     </thead>
                     <tbody>
                       {analytics.popularDestinations.map((dest, idx) => (
-                        <tr key={idx} style={{ borderBottom: '1px solid rgba(255,255,255,0.03)' }}>
+                        <tr key={idx} style={{ borderBottom: '1px solid var(--border-color-hover)' }}>
                           <td style={{ padding: '16px', fontWeight: '600' }}>{dest.name}</td>
                           <td style={{ padding: '16px' }}>👀 {dest.views}</td>
                           <td style={{ padding: '16px' }}>💬 {dest.reviewsCount}</td>
@@ -496,7 +496,7 @@ export const AdminDashboard = () => {
           <div>
             <div style={{ marginBottom: '28px' }}>
               <h2 style={{ fontSize: '32px', fontWeight: '800', marginBottom: '8px' }}>Visual Page Builder Workspace</h2>
-              <p style={{ color: '#94a3b8' }}>Biên tập giao diện, màu sắc, font chữ và sắp xếp các khối nội dung Landing Page tức thì.</p>
+              <p style={{ color: 'var(--text-secondary)' }}>Biên tập giao diện, màu sắc, font chữ và sắp xếp các khối nội dung Landing Page tức thì.</p>
             </div>
 
             {/* Select Destination Selector */}
@@ -518,8 +518,8 @@ export const AdminDashboard = () => {
 
             {/* Builder Workspace Split grid */}
             {!selectedDestId ? (
-              <div className="flex-center" style={{ minHeight: '300px', background: 'rgba(255,255,255,0.01)', border: '1px dashed var(--border-color)', borderRadius: '16px' }}>
-                <div style={{ textAlign: 'center', color: '#64748b' }}>
+              <div className="flex-center" style={{ minHeight: '300px', background: 'var(--bg-app)', border: '1px dashed var(--border-color)', borderRadius: '16px' }}>
+                <div style={{ textAlign: 'center', color: 'var(--text-muted)' }}>
                   <Palette size={48} style={{ marginBottom: '16px' }} />
                   <p>Vui lòng lựa chọn một địa điểm ở trên để mở Cockpit hiệu chỉnh.</p>
                 </div>
@@ -630,8 +630,8 @@ export const AdminDashboard = () => {
                   </div>
 
                   {/* 4. Full Hero Panel Configs */}
-                  <div style={{ background: 'rgba(255,255,255,0.02)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                    <h4 style={{ fontSize: '14px', fontWeight: '700', borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '6px' }}>
+                  <div style={{ background: 'var(--bg-card-hover)', padding: '16px', borderRadius: '10px', border: '1px solid var(--border-color)', display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    <h4 style={{ fontSize: '14px', fontWeight: '700', borderBottom: '1px solid var(--border-color)', paddingBottom: '6px' }}>
                       🚩 Khối Bìa (Hero Cover Section)
                     </h4>
                     
@@ -767,7 +767,7 @@ export const AdminDashboard = () => {
 
                             {sec.sectionType === 'intro' && sec.parsedContent.stats && (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <label style={{ fontSize: '11px', color: '#64748b' }}>Các chỉ số thống kê:</label>
+                                <label style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Các chỉ số thống kê:</label>
                                 {sec.parsedContent.stats.slice(0, 2).map((st, sIdx) => (
                                   <div key={sIdx} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
                                     <input 
@@ -791,7 +791,7 @@ export const AdminDashboard = () => {
 
                             {sec.sectionType === 'activities' && sec.parsedContent.items && (
                               <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                <label style={{ fontSize: '11px', color: '#64748b' }}>Biên tập thẻ hoạt động 1:</label>
+                                <label style={{ fontSize: '11px', color: 'var(--text-muted)' }}>Biên tập thẻ hoạt động 1:</label>
                                 <input 
                                   type="text" 
                                   className="form-input" 
@@ -809,7 +809,7 @@ export const AdminDashboard = () => {
                               </div>
                             )}
 
-                            <span style={{ fontSize: '10px', color: '#64748b', fontStyle: 'italic' }}>
+                            <span style={{ fontSize: '10px', color: 'var(--text-muted)', fontStyle: 'italic' }}>
                               💡 Nội dung thô được serialize tự động sang JSONB trong Postgres.
                             </span>
                           </div>
@@ -917,7 +917,7 @@ export const AdminDashboard = () => {
                           {sec.title || 'Tiêu đề khối'}
                         </h4>
                         {sec.subtitle && (
-                          <p style={{ fontSize: '12px', color: '#64748b', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>
+                          <p style={{ fontSize: '12px', color: 'var(--text-muted)', marginBottom: '14px', textTransform: 'uppercase', letterSpacing: '1px' }}>
                             {sec.subtitle}
                           </p>
                         )}
@@ -934,7 +934,7 @@ export const AdminDashboard = () => {
                                 {sec.parsedContent.stats.slice(0, 4).map((st, stIdx) => (
                                   <div key={stIdx} style={{ background: 'white', padding: '8px 12px', borderRadius: '6px', textAlign: 'center', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
                                     <div style={{ fontSize: '16px', fontWeight: '800', color: 'var(--primary)' }}>{st.value}</div>
-                                    <div style={{ fontSize: '10px', color: '#64748b' }}>{st.label}</div>
+                                    <div style={{ fontSize: '10px', color: 'var(--text-muted)' }}>{st.label}</div>
                                   </div>
                                 ))}
                               </div>
@@ -947,7 +947,7 @@ export const AdminDashboard = () => {
                             {sec.parsedContent.items.map((act, actIdx) => (
                               <div key={actIdx} style={{ background: 'white', padding: '12px', borderRadius: '8px', borderLeft: '3px solid var(--primary)', boxShadow: '0 2px 6px rgba(0,0,0,0.02)' }}>
                                 <h5 style={{ fontSize: '13px', fontWeight: '700', marginBottom: '4px' }}>{act.title}</h5>
-                                <p style={{ fontSize: '11px', color: '#64748b' }}>{act.description}</p>
+                                <p style={{ fontSize: '11px', color: 'var(--text-muted)' }}>{act.description}</p>
                               </div>
                             ))}
                           </div>

@@ -128,7 +128,7 @@ const DestinationManager = () => {
       <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '24px' }}>
         <div>
           <h2 style={{ fontSize: '24px', fontWeight: '800', marginBottom: '8px' }}>Dữ Liệu Địa Điểm (Master Data)</h2>
-          <p style={{ color: '#94a3b8' }}>Quản lý danh sách các điểm đến trên hệ thống.</p>
+          <p style={{ color: 'var(--text-secondary)' }}>Quản lý danh sách các điểm đến trên hệ thống.</p>
         </div>
         {!isEditing && (
           <button 
@@ -244,7 +244,7 @@ const DestinationManager = () => {
             <div key={dest.id} className="glass-panel" style={{ padding: '16px', borderRadius: '16px', position: 'relative' }}>
               <img src={dest.thumbnailUrl || 'https://via.placeholder.com/300x150'} alt={dest.name} style={{ width: '100%', height: '140px', objectFit: 'cover', borderRadius: '12px', marginBottom: '16px' }} />
               <h3 style={{ fontSize: '18px', fontWeight: 'bold', marginBottom: '4px' }}>{dest.name}</h3>
-              <p style={{ color: '#94a3b8', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
+              <p style={{ color: 'var(--text-secondary)', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '4px', marginBottom: '16px' }}>
                 <MapPin size={12} /> {dest.provinceName}
               </p>
               
