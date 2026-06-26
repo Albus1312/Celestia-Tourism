@@ -3,11 +3,16 @@ import { useAuth } from '../context/AuthContext';
 import { api, API_BASE_URL } from '../services/api';
 import { 
   BarChart3, Settings, Eye, MessageSquare, Star, Palette, Type, Heading, Image, 
-  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2, Coffee, Users, Trash2, Plus
+  ArrowUp, ArrowDown, Save, Compass, FileText, CheckCircle2, AlertTriangle, Monitor, Smartphone, Tablet, Database, Loader2, Coffee, Users, Trash2, Plus, PenTool, Navigation
 } from 'lucide-react';
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
+  PieChart, Pie, Cell
+} from 'recharts';
 import DestinationManager from '../components/admin/DestinationManager';
 import ServiceManager from '../components/admin/ServiceManager';
 import UserManager from '../components/admin/UserManager';
+import ArticleManager from '../components/admin/ArticleManager';
 
 export const AdminDashboard = () => {
   const { user } = useAuth();
@@ -286,6 +291,14 @@ export const AdminDashboard = () => {
         )}
 
         <button 
+          onClick={() => setActiveTab('articles')}
+          className={`admin-menu-item ${activeTab === 'articles' ? 'active' : ''}`}
+        >
+          <FileText size={16} />
+          Quản lý Bài viết
+        </button>
+
+        <button 
           onClick={() => setActiveTab('builder')}
           className={`admin-menu-item ${activeTab === 'builder' ? 'active' : ''}`}
         >
@@ -323,6 +336,11 @@ export const AdminDashboard = () => {
           <UserManager />
         )}
 
+        {/* PANEL: ARTICLES */}
+        {activeTab === 'articles' && (
+          <ArticleManager />
+        )}
+
         {/* PANEL A: ANALYTICS COCKPIT */}
         {activeTab === 'analytics' && user?.role === 'Admin' && (
           <div>
@@ -351,7 +369,7 @@ export const AdminDashboard = () => {
                   <div className="dashboard-stat-card">
                     <div className="stat-icon-wrap" style={{ color: '#10b981', background: 'rgba(16, 185, 129, 0.1)' }}><Eye /></div>
                     <div>
-                      <div className="mini-stat-label">Tổng Lượt Xem (Views)</div>
+                      <div className="mini-stat-label">Tổng Lượt Xem</div>
                       <div className="mini-stat-value">{analytics.totalViews}</div>
                     </div>
                   </div>
@@ -369,68 +387,113 @@ export const AdminDashboard = () => {
                       <div className="mini-stat-value">{analytics.averageRating} ★</div>
                     </div>
                   </div>
+                  <div className="dashboard-stat-card">
+                    <div className="stat-icon-wrap" style={{ color: '#8b5cf6', background: 'rgba(139, 92, 246, 0.1)' }}><Users /></div>
+                    <div>
+                      <div className="mini-stat-label">Tổng Người Dùng</div>
+                      <div className="mini-stat-value">{analytics.totalUsers}</div>
+                    </div>
+                  </div>
+                  <div className="dashboard-stat-card">
+                    <div className="stat-icon-wrap" style={{ color: '#0ea5e9', background: 'rgba(14, 165, 233, 0.1)' }}><PenTool /></div>
+                    <div>
+                      <div className="mini-stat-label">Bài Viết (Blog)</div>
+                      <div className="mini-stat-value">{analytics.totalArticles}</div>
+                    </div>
+                  </div>
+                  <div className="dashboard-stat-card">
+                    <div className="stat-icon-wrap" style={{ color: '#ef4444', background: 'rgba(239, 68, 68, 0.1)' }}><Navigation /></div>
+                    <div>
+                      <div className="mini-stat-label">Tổng Số Tour</div>
+                      <div className="mini-stat-value">{analytics.totalTours}</div>
+                    </div>
+                  </div>
                 </div>
 
                 {/* Charts Area */}
-                <div className="dashboard-chart-grid">
+                <div className="dashboard-chart-grid" style={{ gridTemplateColumns: '2fr 1fr', gap: '24px', marginTop: '24px' }}>
                   
-                  {/* Past 30 Days views bar chart (Pure CSS mockup connected to real Db pageview count) */}
+                  {/* Past 30 Days views line chart with Recharts */}
                   <div className="chart-card">
                     <div className="chart-header">
                       <h3 style={{ fontSize: '18px', fontWeight: '700' }}>Biểu Đồ Lưu Lượng (30 Ngày Qua)</h3>
                       <span style={{ fontSize: '12px', color: 'var(--text-muted)' }}>Đơn vị: Lượt truy cập / ngày</span>
                     </div>
 
-                    <div className="chart-container">
-                      {analytics.dailyViews.map((day, idx) => {
-                        // Calculate percentage height
-                        const maxViews = Math.max(...analytics.dailyViews.map(d => d.views), 1);
-                        const pctHeight = (day.views / maxViews) * 80; // scale to 80% max
-                        
-                        return (
-                          <div key={idx} className="chart-bar-col">
-                            <div 
-                              className="chart-bar" 
-                              style={{ height: `${Math.max(pctHeight, 5)}%` }}
-                            >
-                              <div className="chart-tooltip">
-                                <strong>{day.views} views</strong><br/>
-                                <span style={{fontSize: '9px'}}>{new Date(day.date).toLocaleDateString('vi-VN')}</span>
-                              </div>
-                            </div>
-                            <span className="chart-label">
-                              {idx % 5 === 0 ? day.date.substring(8, 10) : ''}
-                            </span>
-                          </div>
-                        );
-                      })}
+                    <div style={{ height: '300px', width: '100%', marginTop: '20px' }}>
+                      <ResponsiveContainer width="100%" height="100%">
+                        <LineChart data={analytics.viewsOverTime}>
+                          <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                          <XAxis 
+                            dataKey="date" 
+                            tickFormatter={(tick) => tick.substring(8, 10) + '/' + tick.substring(5, 7)}
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fontSize: 12, fill: '#64748b' }}
+                            dy={10}
+                          />
+                          <YAxis 
+                            axisLine={false}
+                            tickLine={false}
+                            tick={{ fontSize: 12, fill: '#64748b' }}
+                            dx={-10}
+                          />
+                          <RechartsTooltip 
+                            contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)' }}
+                            labelFormatter={(label) => new Date(label).toLocaleDateString('vi-VN')}
+                          />
+                          <Line 
+                            type="monotone" 
+                            dataKey="views" 
+                            stroke="#3b82f6" 
+                            strokeWidth={3}
+                            dot={false}
+                            activeDot={{ r: 6, fill: '#3b82f6', stroke: '#fff', strokeWidth: 2 }}
+                          />
+                        </LineChart>
+                      </ResponsiveContainer>
                     </div>
                   </div>
 
-                  {/* Device breakdown and geographic layout */}
+                  {/* Device breakdown PieChart */}
                   <div className="chart-card" style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
                     <div>
                       <h3 style={{ fontSize: '17px', fontWeight: '700', marginBottom: '16px' }}>Phân Phối Thiết Bị</h3>
-                      <div className="device-donut-wrap">
+                      <div style={{ height: '220px', width: '100%' }}>
+                        <ResponsiveContainer width="100%" height="100%">
+                          <PieChart>
+                            <Pie
+                              data={analytics.deviceDistribution}
+                              cx="50%"
+                              cy="50%"
+                              innerRadius={60}
+                              outerRadius={80}
+                              paddingAngle={5}
+                              dataKey="count"
+                              nameKey="device"
+                            >
+                              {analytics.deviceDistribution.map((entry, index) => (
+                                <Cell 
+                                  key={`cell-${index}`} 
+                                  fill={entry.device === 'desktop' ? '#3b82f6' : entry.device === 'mobile' ? '#10b981' : '#f59e0b'} 
+                                />
+                              ))}
+                            </Pie>
+                            <RechartsTooltip />
+                          </PieChart>
+                        </ResponsiveContainer>
+                      </div>
+                      
+                      {/* Legend */}
+                      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
                         {analytics.deviceDistribution.map((item, idx) => {
                           const total = analytics.deviceDistribution.reduce((acc, curr) => acc + curr.count, 0) || 1;
                           const pct = Math.round((item.count / total) * 100);
                           const colors = { desktop: '#3b82f6', mobile: '#10b981', tablet: '#f59e0b' };
-                          
                           return (
-                            <div key={idx}>
-                              <div className="donut-row">
-                                <span className="donut-label-wrapper">
-                                  <div className="donut-color-dot" style={{ background: colors[item.device] || '#3b82f6' }}></div>
-                                  <span style={{ textTransform: 'capitalize' }}>
-                                    {item.device === 'desktop' ? 'Máy tính để bàn' : item.device === 'mobile' ? 'Điện thoại di động' : 'Máy tính bảng'}
-                                  </span>
-                                </span>
-                                <strong style={{ fontSize: '13px' }}>{item.count} ({pct}%)</strong>
-                              </div>
-                              <div className="donut-bar-bg">
-                                <div className="donut-bar-fill" style={{ width: `${pct}%`, background: colors[item.device] || '#3b82f6' }}></div>
-                              </div>
+                            <div key={idx} style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '12px' }}>
+                              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: colors[item.device] || '#3b82f6' }}></div>
+                              <span style={{ textTransform: 'capitalize' }}>{item.device}: {pct}%</span>
                             </div>
                           );
                         })}

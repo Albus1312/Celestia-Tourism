@@ -27,6 +27,9 @@ namespace Celestia.Api.Controllers
             var totalDestinations = await _context.Destinations.CountAsync();
             var totalViews = await _context.PageViews.CountAsync();
             var totalReviews = await _context.Reviews.CountAsync();
+            var totalUsers = await _context.Users.CountAsync();
+            var totalArticles = await _context.Articles.CountAsync();
+            var totalTours = await _context.TourPackages.CountAsync();
             
             double averageRating = 0;
             if (await _context.Destinations.AnyAsync())
@@ -99,19 +102,20 @@ namespace Celestia.Api.Controllers
                 .Take(7)
                 .ToListAsync();
 
-            var overview = new AnalyticsOverviewDto
+            return Ok(new
             {
                 TotalDestinations = totalDestinations,
                 TotalViews = totalViews,
                 TotalReviews = totalReviews,
+                TotalUsers = totalUsers,
+                TotalArticles = totalArticles,
+                TotalTours = totalTours,
                 AverageRating = averageRating,
-                DailyViews = dailyViewsList,
+                PopularDestinations = popularDestinations,
+                ViewsOverTime = dailyViewsList,
                 DeviceDistribution = deviceCounts,
-                RegionDistribution = regionCounts,
-                PopularDestinations = popularDestinations
-            };
-
-            return Ok(overview);
+                RegionDistribution = regionCounts
+            });
         }
     }
 }
