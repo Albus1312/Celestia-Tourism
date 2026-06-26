@@ -1365,7 +1365,7 @@ button {
 }
 
 .admin-sidebar {
-  background: rgba(10, 12, 26, 0.95);
+  background: var(--bg-card);
   border-right: 1px solid var(--border-color);
   padding: 32px 16px;
   display: flex;
@@ -1399,7 +1399,7 @@ button {
 
 .admin-body {
   padding: 40px;
-  background: #0b0d19;
+  background: var(--bg-app);
   overflow-y: auto;
   height: calc(100vh - 80px);
 }
