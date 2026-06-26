@@ -1,0 +1,453 @@
+/* VIETRAVEL THEME */
+.theme-wrapper.theme-vietravel {
+  --primary: #005b9f; /* Vietravel Blue */
+  --secondary: #ed1c24; /* Vietravel Red */
+  --accent: #ffb700; /* Gold/Yellow */
+  --bg-app: #f4f6f8;
+  --text-primary: #333333;
+  --text-secondary: #666666;
+  background: var(--bg-app);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+}
+
+.theme-vietravel h1, .theme-vietravel h2, .theme-vietravel h3 {
+  color: var(--primary);
+  font-weight: 800;
+}
+
+.theme-vietravel .theme-hero {
+  position: relative;
+  height: 80vh;
+  min-height: 600px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: white;
+  margin-bottom: 80px; /* Space for the floating booking box */
+}
+
+.theme-vietravel .theme-hero::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(to bottom, rgba(0, 91, 159, 0.4), rgba(0, 0, 0, 0.7));
+  z-index: 1;
+}
+
+.theme-vietravel .theme-hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 900px;
+  padding: 0 24px;
+  margin-top: -60px; /* Lift up a bit to balance floating box */
+}
+
+.theme-vietravel .theme-hero-title {
+  font-size: 56px;
+  font-weight: 800;
+  margin-bottom: 24px;
+  text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  color: white;
+}
+
+.theme-vietravel .theme-hero-subtitle {
+  font-size: 20px;
+  opacity: 0.95;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  color: white;
+}
+
+/* Floating Booking Box */
+.theme-vietravel .booking-widget {
+  position: absolute;
+  bottom: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 1000px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+  z-index: 10;
+  display: flex;
+  padding: 24px 32px;
+  gap: 20px;
+  align-items: center;
+}
+
+.theme-vietravel .booking-input-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  color: var(--text-primary);
+}
+
+.theme-vietravel .booking-input-group input {
+  border: none;
+  background: transparent;
+  outline: none;
+  width: 100%;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.theme-vietravel .booking-btn {
+  background: var(--secondary);
+  color: white;
+  padding: 14px 32px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(237, 28, 36, 0.3);
+}
+
+.theme-vietravel .booking-btn:hover {
+  background: #d11219;
+  transform: translateY(-2px);
+}
+
+/* Sections */
+.theme-vietravel .theme-section {
+  padding: 80px 0;
+}
+
+.theme-vietravel .section-title-wrap {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.theme-vietravel .theme-sec-title {
+  font-size: 32px;
+  margin-bottom: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  position: relative;
+  display: inline-block;
+}
+
+.theme-vietravel .theme-sec-title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 4px;
+  background: var(--secondary);
+  border-radius: 2px;
+}
+
+.theme-vietravel .theme-sec-subtitle {
+  color: var(--text-secondary);
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+/* Intro Grid */
+.theme-vietravel .intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .theme-vietravel .intro-grid {
+    grid-template-columns: 1fr;
+  }
+  .theme-vietravel .booking-widget {
+    flex-direction: column;
+    padding: 20px;
+    bottom: -100px;
+  }
+  .theme-vietravel .theme-hero {
+    margin-bottom: 130px;
+  }
+}
+
+.theme-vietravel .intro-text p {
+  font-size: 16px;
+  line-height: 1.8;
+  margin-bottom: 20px;
+  color: var(--text-secondary);
+}
+
+.theme-vietravel .stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.theme-vietravel .stat-card {
+  background: white;
+  padding: 30px;
+  border-radius: 16px;
+  text-align: center;
+  border: 1px solid rgba(0, 91, 159, 0.1);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+}
+
+.theme-vietravel .stat-val {
+  font-size: 36px;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.theme-vietravel .stat-lbl {
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+/* Activities Grid */
+.theme-vietravel .activities-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+.theme-vietravel .act-card {
+  background: white;
+  padding: 32px 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.02);
+  transition: all 0.3s ease;
+  text-align: center;
+}
+
+.theme-vietravel .act-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0, 91, 159, 0.1);
+  border-color: rgba(0, 91, 159, 0.2);
+}
+
+.theme-vietravel .act-icon-wrap {
+  width: 64px;
+  height: 64px;
+  background: rgba(0, 91, 159, 0.05);
+  color: var(--primary);
+  border-radius: 50%;
+  margin: 0 auto 20px;
+}
+
+.theme-vietravel .act-title {
+  font-size: 20px;
+  margin-bottom: 12px;
+  color: var(--text-primary);
+}
+
+.theme-vietravel .act-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Local Services (Tours/Hotels) */
+.theme-vietravel .services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 30px;
+}
+
+.theme-vietravel .service-card {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  border: 1px solid rgba(0,0,0,0.04);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+
+.theme-vietravel .service-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+}
+
+.theme-vietravel .service-img-wrap {
+  position: relative;
+  height: 200px;
+}
+
+.theme-vietravel .service-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.theme-vietravel .service-type-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: var(--primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.theme-vietravel .service-content {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.theme-vietravel .service-title {
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.theme-vietravel .service-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-bottom: 16px;
+}
+
+.theme-vietravel .service-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 16px;
+}
+
+.theme-vietravel .service-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  color: #f59e0b; /* Yellow star */
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.theme-vietravel .service-price {
+  color: var(--secondary);
+  font-weight: 800;
+  font-size: 18px;
+}
+
+/* Reviews */
+.theme-vietravel .reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.theme-vietravel .review-card {
+  background: white;
+  padding: 24px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+}
+
+/* Gallery */
+.theme-vietravel .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+}
+.theme-vietravel .gallery-item {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.theme-vietravel .gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.5s;
+}
+.theme-vietravel .gallery-item:hover img {
+  transform: scale(1.05);
+}
+
+/* CTA Section */
+.theme-vietravel .cta-panel {
+  background: linear-gradient(135deg, var(--primary) 0%, #003b6f 100%);
+  color: white;
+  padding: 80px 24px;
+  text-align: center;
+  border-radius: 0;
+  margin: 0;
+}
+
+.theme-vietravel .cta-title {
+  font-size: 36px;
+  font-weight: 800;
+  margin-bottom: 16px;
+  color: white;
+}
+
+.theme-vietravel .cta-subtitle {
+  font-size: 18px;
+  opacity: 0.9;
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-inline: auto;
+  color: white;
+}
+
+.theme-vietravel .cta-form {
+  display: flex;
+  max-width: 600px;
+  margin: 0 auto;
+  background: white;
+  padding: 8px;
+  border-radius: 8px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.theme-vietravel .cta-form input {
+  flex: 1;
+  border: none;
+  padding: 12px 20px;
+  font-size: 16px;
+  outline: none;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.theme-vietravel .cta-form input:focus {
+  background: transparent;
+}
+
+.theme-vietravel .cta-form button {
+  background: var(--secondary);
+  color: white;
+  border: none;
+  padding: 0 32px;
+  font-weight: 700;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.theme-vietravel .cta-form button:hover {
+  background: #d11219;
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { api } from '../services/api';
 import { 
-  ArrowLeft, Star, Send, ShieldCheck, 
+  ArrowLeft, Star, Send, ShieldCheck, User, Search,
   Ship, Compass, Flame, Wind, Navigation, MapPin, Utensils, Sparkles, Coffee, PenTool, Globe, Calendar
 } from 'lucide-react';
 
@@ -115,7 +115,7 @@ export const LandingPage = () => {
   }
 
   // Get active theme class
-  const themeSlug = config.themeId || 'ocean-breeze';
+  const themeSlug = 'vietravel'; // Override for Vietravel Design
 
   // Inject custom database overridden variables (colors & fonts) inline
   const styleOverrides = {
@@ -233,28 +233,13 @@ export const LandingPage = () => {
                       <strong>Đăng ký thành công! Tư vấn viên của chúng tôi sẽ liên hệ trong 15 phút.</strong>
                     </div>
                   ) : (
-                    <form onSubmit={handleCtaSubmit} style={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: '12px',
-                      maxWidth: '600px',
-                      margin: '0 auto',
-                      justifyContent: 'center'
-                    }}>
+                    <form onSubmit={handleCtaSubmit} className="cta-form">
                       <input 
                         type="text" 
                         required
                         placeholder={content.placeholderName || "Họ tên..."}
                         value={ctaName}
                         onChange={(e) => setCtaName(e.target.value)}
-                        style={{
-                          background: 'white',
-                          color: '#0f172a',
-                          padding: '12px 20px',
-                          borderRadius: '30px',
-                          fontSize: '14px',
-                          minWidth: '200px'
-                        }}
                       />
                       <input 
                         type="tel" 
@@ -262,14 +247,6 @@ export const LandingPage = () => {
                         placeholder={content.placeholderPhone || "Số điện thoại..."}
                         value={ctaPhone}
                         onChange={(e) => setCtaPhone(e.target.value)}
-                        style={{
-                          background: 'white',
-                          color: '#0f172a',
-                          padding: '12px 20px',
-                          borderRadius: '30px',
-                          fontSize: '14px',
-                          minWidth: '200px'
-                        }}
                       />
                       <button type="submit" className="cta-btn">
                         {content.buttonText || "Gửi đi"}
@@ -327,13 +304,33 @@ export const LandingPage = () => {
           <h1 className="theme-hero-title">{config.heroTitle || destination.name}</h1>
           <p className="theme-hero-subtitle">{config.heroSubtitle || destination.description}</p>
         </div>
+
+        {/* Floating Booking Widget Mockup */}
+        <div className="booking-widget">
+          <div className="booking-input-group">
+            <MapPin size={20} color="var(--secondary)" />
+            <input type="text" placeholder="Bạn muốn đi đâu?" defaultValue={destination.name} />
+          </div>
+          <div className="booking-input-group">
+            <Calendar size={20} color="var(--secondary)" />
+            <input type="text" placeholder="Ngày khởi hành" defaultValue="Ngày mai" />
+          </div>
+          <div className="booking-input-group">
+            <User size={20} color="var(--secondary)" />
+            <input type="text" placeholder="Số khách" defaultValue="2 Người lớn" />
+          </div>
+          <button className="booking-btn">
+            <Search size={18} />
+            Tìm Chuyến Đi
+          </button>
+        </div>
       </div>
 
       {/* 3. Ordered Configuration Layout Sections */}
       {config.sections && config.sections.map(section => renderSection(section))}
 
       {/* 4. Unified Reviews & Public Feedback Panel */}
-      <section className="theme-section reviews-section" style={{ color: '#0f172a' }}>
+      <section className="theme-section reviews-section" style={{ background: '#ffffff', color: 'var(--text-primary)' }}>
         <div className="container">
           <div className="section-title-wrap">
             <h2 className="theme-sec-title">Phản Hồi & Đánh Giá</h2>
@@ -342,17 +339,17 @@ export const LandingPage = () => {
 
           <div className="reviews-grid">
             {destination.reviews && destination.reviews.map((rev) => (
-              <div key={rev.id} className="review-item-card" style={{ background: 'white', color: '#0f172a', border: '1px solid rgba(0,0,0,0.06)' }}>
+              <div key={rev.id} className="review-card">
                 <div className="review-item-header">
-                  <div className="review-author">{rev.authorName}</div>
+                  <div className="review-author" style={{ fontWeight: 'bold', fontSize: '16px' }}>{rev.authorName}</div>
                   <div className="review-stars">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <Star key={i} size={12} fill={i < rev.rating ? '#f59e0b' : 'none'} stroke="#f59e0b" />
+                      <Star key={i} size={14} fill={i < rev.rating ? '#f59e0b' : 'none'} stroke="#f59e0b" />
                     ))}
                   </div>
                 </div>
-                <p className="review-comment">"{rev.comment}"</p>
-                <div className="review-date">
+                <p className="review-comment" style={{ marginTop: '12px', fontSize: '14px', color: 'var(--text-secondary)' }}>"{rev.comment}"</p>
+                <div className="review-date" style={{ marginTop: '16px', fontSize: '12px', color: '#94a3b8' }}>
                   📅 {new Date(rev.createdAt).toLocaleDateString('vi-VN')}
                 </div>
               </div>
@@ -433,33 +430,33 @@ export const LandingPage = () => {
 
       {/* NEW: Local Services Section */}
       {localServices.length > 0 && (
-        <section className="theme-section" style={{ background: 'var(--bg-secondary)', padding: '60px 0' }}>
+        <section className="theme-section" style={{ background: '#f8fafc' }}>
           <div className="container">
-            <h2 className="section-title">Dịch vụ & Tiện ích tại {destination.name}</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '20px', marginTop: '30px' }}>
+            <div className="section-title-wrap">
+              <h2 className="theme-sec-title">Dịch vụ & Tiện ích tại {destination.name}</h2>
+              <p className="theme-sec-subtitle">Khám phá các dịch vụ hàng đầu được Vietravel chọn lọc</p>
+            </div>
+            <div className="services-grid">
               {localServices.map(svc => (
-                <div key={svc.id} style={{ background: 'var(--bg-primary)', borderRadius: '16px', overflow: 'hidden', boxShadow: '0 4px 20px rgba(0,0,0,0.05)' }}>
-                  <div style={{ height: '160px', background: '#e2e8f0', backgroundImage: `url(${svc.imageUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }} />
-                  <div style={{ padding: '20px' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                      <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: 0 }}>{svc.name}</h3>
-                      <span style={{ 
-                        padding: '4px 10px', borderRadius: '20px', fontSize: '12px', fontWeight: '600',
-                        background: svc.type === 'Homestay' ? '#fdf4ff' : svc.type === 'Restaurant' ? '#fffbeb' : '#f0fdfa',
-                        color: svc.type === 'Homestay' ? '#c026d3' : svc.type === 'Restaurant' ? '#d97706' : '#0d9488'
-                      }}>
-                        {svc.type === 'Homestay' ? 'Lưu trú' : svc.type === 'Restaurant' ? 'Ăn uống' : 'Di chuyển'}
-                      </span>
+                <div key={svc.id} className="service-card">
+                  <div className="service-img-wrap">
+                    <img src={svc.imageUrl} alt={svc.name} className="service-img" />
+                    <span className="service-type-badge">
+                      {svc.type === 'Homestay' ? 'Lưu trú' : svc.type === 'Restaurant' ? 'Ăn uống' : 'Di chuyển'}
+                    </span>
+                  </div>
+                  <div className="service-content">
+                    <h3 className="service-title">{svc.name}</h3>
+                    <div className="service-location">
+                      <MapPin size={14} /> {svc.address || destination.name}
                     </div>
-                    <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '12px' }}>{svc.description}</p>
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', fontSize: '13px', color: 'var(--text-secondary)' }}>
-                      {svc.address && <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}><MapPin size={14} /> {svc.address}</div>}
-                      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '8px' }}>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '4px', color: '#eab308', fontWeight: 'bold' }}>
-                          <Star size={14} fill="#eab308" /> {svc.rating}
-                        </div>
-                        {svc.phone && <strong style={{ color: 'var(--accent)' }}>{svc.phone}</strong>}
+                    <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '16px', flex: 1 }}>{svc.description}</p>
+                    
+                    <div className="service-footer">
+                      <div className="service-rating">
+                        <Star size={16} fill="#f59e0b" /> {svc.rating}
                       </div>
+                      {svc.phone && <div className="service-price">Liên hệ</div>}
                     </div>
                   </div>
                 </div>
