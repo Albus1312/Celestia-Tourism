@@ -23,78 +23,63 @@ namespace Celestia.Api.Data
         public DbSet<PageView> PageViews => Set<PageView>();
         public DbSet<LocalService> LocalServices => Set<LocalService>();
 
+        // Extended Models DbSets
+        public DbSet<Article> Articles => Set<Article>();
+        public DbSet<Tag> Tags => Set<Tag>();
+        public DbSet<ArticleTag> ArticleTags => Set<ArticleTag>();
+        public DbSet<MediaFile> MediaFiles => Set<MediaFile>();
+        public DbSet<Role> Roles => Set<Role>();
+        public DbSet<UserRole> UserRoles => Set<UserRole>();
+        public DbSet<UserPoint> UserPoints => Set<UserPoint>();
+        public DbSet<Comment> Comments => Set<Comment>();
+        public DbSet<UserFavorite> UserFavorites => Set<UserFavorite>();
+        public DbSet<UserInteraction> UserInteractions => Set<UserInteraction>();
+        public DbSet<SearchLog> SearchLogs => Set<SearchLog>();
+        public DbSet<TourPackage> TourPackages => Set<TourPackage>();
+        public DbSet<Booking> Bookings => Set<Booking>();
+        public DbSet<Payment> Payments => Set<Payment>();
+        public DbSet<Itinerary> Itineraries => Set<Itinerary>();
+        public DbSet<ItineraryItem> ItineraryItems => Set<ItineraryItem>();
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            // Configure User-UserSession relationship
-            modelBuilder.Entity<UserSession>()
-                .HasOne(us => us.User)
-                .WithMany()
-                .HasForeignKey(us => us.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // Existing configurations
+            modelBuilder.Entity<UserSession>().HasOne(us => us.User).WithMany().HasForeignKey(us => us.UserId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<PasswordResetToken>().HasOne(prt => prt.User).WithMany().HasForeignKey(prt => prt.UserId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Province>().HasOne(p => p.Region).WithMany(r => r.Provinces).HasForeignKey(p => p.RegionId);
+            modelBuilder.Entity<Destination>().HasOne(d => d.Province).WithMany(p => p.Destinations).HasForeignKey(d => d.ProvinceId);
+            modelBuilder.Entity<LocalService>().HasOne(s => s.Destination).WithMany().HasForeignKey(s => s.DestinationId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Destination>().HasOne(d => d.Category).WithMany(c => c.Destinations).HasForeignKey(d => d.CategoryId);
+            modelBuilder.Entity<LandingPageConfig>().HasOne(c => c.Destination).WithOne(d => d.LandingPageConfig).HasForeignKey<LandingPageConfig>(c => c.DestinationId);
+            modelBuilder.Entity<LandingPageConfig>().HasOne(c => c.Theme).WithMany().HasForeignKey(c => c.ThemeId);
+            modelBuilder.Entity<LandingPageSection>().HasOne(s => s.LandingPageConfig).WithMany(c => c.Sections).HasForeignKey(s => s.LandingPageConfigId);
+            modelBuilder.Entity<Review>().HasOne(r => r.Destination).WithMany(d => d.Reviews).HasForeignKey(r => r.DestinationId);
+            modelBuilder.Entity<PageView>().HasOne(p => p.Destination).WithMany(d => d.PageViews).HasForeignKey(p => p.DestinationId);
 
-            // Configure User-PasswordResetToken relationship
-            modelBuilder.Entity<PasswordResetToken>()
-                .HasOne(prt => prt.User)
-                .WithMany()
-                .HasForeignKey(prt => prt.UserId)
-                .OnDelete(DeleteBehavior.Cascade);
+            // Extended Models configurations (Composite Keys)
+            modelBuilder.Entity<ArticleTag>().HasKey(at => new { at.ArticleId, at.TagId });
+            modelBuilder.Entity<ArticleTag>().HasOne(at => at.Article).WithMany(a => a.ArticleTags).HasForeignKey(at => at.ArticleId);
+            modelBuilder.Entity<ArticleTag>().HasOne(at => at.Tag).WithMany(t => t.ArticleTags).HasForeignKey(at => at.TagId);
 
-            // Configure Region-Province relationship
-            modelBuilder.Entity<Province>()
-                .HasOne(p => p.Region)
-                .WithMany(r => r.Provinces)
-                .HasForeignKey(p => p.RegionId);
+            modelBuilder.Entity<UserRole>().HasKey(ur => new { ur.UserId, ur.RoleId });
+            modelBuilder.Entity<UserRole>().HasOne(ur => ur.User).WithMany(u => u.UserRoles).HasForeignKey(ur => ur.UserId);
+            modelBuilder.Entity<UserRole>().HasOne(ur => ur.Role).WithMany(r => r.UserRoles).HasForeignKey(ur => ur.RoleId);
 
-            // Configure Province-Destination relationship
-            modelBuilder.Entity<Destination>()
-                .HasOne(d => d.Province)
-                .WithMany(p => p.Destinations)
-                .HasForeignKey(d => d.ProvinceId);
+            modelBuilder.Entity<UserFavorite>().HasKey(uf => new { uf.UserId, uf.DestinationId });
+            modelBuilder.Entity<UserFavorite>().HasOne(uf => uf.User).WithMany(u => u.UserFavorites).HasForeignKey(uf => uf.UserId);
+            modelBuilder.Entity<UserFavorite>().HasOne(uf => uf.Destination).WithMany(d => d.UserFavorites).HasForeignKey(uf => uf.DestinationId);
 
-            // Configure LocalService-Destination relationship
-            modelBuilder.Entity<LocalService>()
-                .HasOne(s => s.Destination)
-                .WithMany()
-                .HasForeignKey(s => s.DestinationId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            // Configure Category-Destination relationship
-            modelBuilder.Entity<Destination>()
-                .HasOne(d => d.Category)
-                .WithMany(c => c.Destinations)
-                .HasForeignKey(d => d.CategoryId);
-
-            // Configure Destination-LandingPageConfig relationship
-            modelBuilder.Entity<LandingPageConfig>()
-                .HasOne(c => c.Destination)
-                .WithOne(d => d.LandingPageConfig)
-                .HasForeignKey<LandingPageConfig>(c => c.DestinationId);
-
-            // Configure Theme-LandingPageConfig relationship
-            modelBuilder.Entity<LandingPageConfig>()
-                .HasOne(c => c.Theme)
-                .WithMany()
-                .HasForeignKey(c => c.ThemeId);
-
-            // Configure Section-LandingPageConfig relationship
-            modelBuilder.Entity<LandingPageSection>()
-                .HasOne(s => s.LandingPageConfig)
-                .WithMany(c => c.Sections)
-                .HasForeignKey(s => s.LandingPageConfigId);
-
-            // Configure Review-Destination relationship
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Destination)
-                .WithMany(d => d.Reviews)
-                .HasForeignKey(r => r.DestinationId);
-
-            // Configure PageView-Destination relationship
-            modelBuilder.Entity<PageView>()
-                .HasOne(p => p.Destination)
-                .WithMany(d => d.PageViews)
-                .HasForeignKey(p => p.DestinationId);
+            // Restrict cascade delete to prevent multiple cascade paths error (SQL Server limitation)
+            modelBuilder.Entity<Article>().HasOne(a => a.Author).WithMany(u => u.Articles).HasForeignKey(a => a.AuthorId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Article>().HasOne(a => a.Destination).WithMany(d => d.Articles).HasForeignKey(a => a.DestinationId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Comment>().HasOne(c => c.User).WithMany(u => u.Comments).HasForeignKey(c => c.UserId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Comment>().HasOne(c => c.Article).WithMany().HasForeignKey(c => c.ArticleId).OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Booking>().HasOne(b => b.User).WithMany(u => u.Bookings).HasForeignKey(b => b.UserId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Booking>().HasOne(b => b.TourPackage).WithMany(t => t.Bookings).HasForeignKey(b => b.TourPackageId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<TourPackage>().HasOne(t => t.Destination).WithMany(d => d.TourPackages).HasForeignKey(t => t.DestinationId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<ItineraryItem>().HasOne(i => i.Destination).WithMany(d => d.ItineraryItems).HasForeignKey(i => i.DestinationId).OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

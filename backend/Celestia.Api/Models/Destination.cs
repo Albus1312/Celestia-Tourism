@@ -28,5 +28,13 @@ namespace Celestia.Api.Models
         public LandingPageConfig? LandingPageConfig { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<PageView> PageViews { get; set; } = new List<PageView>();
+
+        // Extended Navigation Properties
+        public ICollection<Article> Articles { get; set; } = new List<Article>();
+        public ICollection<MediaFile> MediaFiles { get; set; } = new List<MediaFile>();
+        public ICollection<UserFavorite> UserFavorites { get; set; } = new List<UserFavorite>();
+        public ICollection<UserInteraction> UserInteractions { get; set; } = new List<UserInteraction>();
+        public ICollection<TourPackage> TourPackages { get; set; } = new List<TourPackage>();
+        public ICollection<ItineraryItem> ItineraryItems { get; set; } = new List<ItineraryItem>();
     }
 }
