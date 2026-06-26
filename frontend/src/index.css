@@ -141,9 +141,9 @@ button {
 
 .navbar.scrolled {
   height: 68px;
-  background: rgba(7, 9, 19, 0.85);
+  background: var(--glass-bg);
   backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid var(--glass-border);
 }
 
 .navbar .container {

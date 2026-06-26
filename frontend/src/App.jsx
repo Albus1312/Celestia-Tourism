@@ -84,16 +84,16 @@ function App() {
           </div>
 
           <footer style={{
-            background: '#04060d',
-            borderTop: '1px solid rgba(255,255,255,0.05)',
+            background: 'var(--bg-app)',
+            borderTop: '1px solid var(--border-color)',
             padding: '24px 0',
             textAlign: 'center',
             fontSize: '13px',
-            color: '#64748b'
+            color: 'var(--text-secondary)'
           }}>
             <div className="container">
               <p>© {new Date().getFullYear()} Celestia.vn - Hệ Thống Trình Diễn & Lập Bản Đồ Du Lịch Việt Nam.</p>
-              <p style={{ fontSize: '11px', color: '#475569', marginTop: '6px' }}>
+              <p style={{ fontSize: '11px', color: 'var(--text-muted)', marginTop: '6px' }}>
                 Phát triển phục vụ báo cáo tiến độ kỹ thuật. Đã tích hợp PostgreSQL 18 & Entity Framework Core.
               </p>
             </div>
