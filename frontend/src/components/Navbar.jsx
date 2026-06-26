@@ -93,6 +93,12 @@ export const Navbar = () => {
                 Trang Chủ
               </Link>
             </li>
+            <li>
+              <Link to="/community" className={`nav-link ${location.pathname === '/community' ? 'active' : ''}`}>
+                <User size={16} style={{ verticalAlign: 'middle', marginRight: '6px' }} />
+                Cộng Đồng
+              </Link>
+            </li>
             {user && (user.role === 'Admin' || user.role === 'Editor') && (
               <li>
                 <Link to="/admin" className={`nav-link ${location.pathname === '/admin' ? 'active' : ''}`}>

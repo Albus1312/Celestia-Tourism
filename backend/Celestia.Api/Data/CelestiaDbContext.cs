@@ -40,6 +40,8 @@ namespace Celestia.Api.Data
         public DbSet<Payment> Payments => Set<Payment>();
         public DbSet<Itinerary> Itineraries => Set<Itinerary>();
         public DbSet<ItineraryItem> ItineraryItems => Set<ItineraryItem>();
+        public DbSet<SocialPost> SocialPosts => Set<SocialPost>();
+        public DbSet<SocialComment> SocialComments => Set<SocialComment>();
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -80,6 +82,12 @@ namespace Celestia.Api.Data
             modelBuilder.Entity<Booking>().HasOne(b => b.TourPackage).WithMany(t => t.Bookings).HasForeignKey(b => b.TourPackageId).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<TourPackage>().HasOne(t => t.Destination).WithMany(d => d.TourPackages).HasForeignKey(t => t.DestinationId).OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<ItineraryItem>().HasOne(i => i.Destination).WithMany(d => d.ItineraryItems).HasForeignKey(i => i.DestinationId).OnDelete(DeleteBehavior.Restrict);
+
+            // Social features restrictions
+            modelBuilder.Entity<SocialPost>().HasOne(s => s.User).WithMany().HasForeignKey(s => s.UserId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<SocialPost>().HasOne(s => s.LinkedDestination).WithMany().HasForeignKey(s => s.DestinationId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<SocialComment>().HasOne(sc => sc.User).WithMany().HasForeignKey(sc => sc.UserId).OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<SocialComment>().HasOne(sc => sc.SocialPost).WithMany().HasForeignKey(sc => sc.SocialPostId).OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

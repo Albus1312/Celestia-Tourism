@@ -5,6 +5,7 @@ import { Navbar } from './components/Navbar';
 import { Home } from './pages/Home';
 import { LandingPage } from './pages/LandingPage';
 import { AdminDashboard } from './pages/AdminDashboard';
+import { CommunityPage } from './pages/CommunityPage';
 import { Register } from './pages/Register';
 import { ShieldAlert, Compass, LogIn } from 'lucide-react';
 import './index.css';
@@ -74,6 +75,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/register" element={<Register />} />
               <Route path="/landingpage/:id" element={<LandingPage />} />
+              <Route path="/community" element={<CommunityPage />} />
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <AdminDashboard />

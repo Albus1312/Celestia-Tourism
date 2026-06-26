@@ -1,4 +1,4 @@
-﻿namespace Celestia.Api.Models {
+namespace Celestia.Api.Models {
     using System;
     using System.Collections.Generic;
 
@@ -155,5 +155,30 @@
         public LocalService? LocalService { get; set; }
         public int DayNumber { get; set; }
         public string TimeStart { get; set; } = string.Empty;
+    }
+
+    public class SocialPost {
+        public int Id { get; set; }
+        public string Content { get; set; } = string.Empty;
+        public string? MediaUrl { get; set; }
+        public int UserId { get; set; }
+        public User? User { get; set; }
+        public int? DestinationId { get; set; }
+        public Destination? LinkedDestination { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+        public int LikesCount { get; set; } = 0;
+        public int CommentsCount { get; set; } = 0;
+        public bool IsLookingForCompanion { get; set; } = false;
+        public DateTime? TravelDate { get; set; }
+    }
+
+    public class SocialComment {
+        public int Id { get; set; }
+        public string Content { get; set; } = string.Empty;
+        public int UserId { get; set; }
+        public User? User { get; set; }
+        public int SocialPostId { get; set; }
+        public SocialPost? SocialPost { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }
