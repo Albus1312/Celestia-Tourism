@@ -28,21 +28,20 @@ const AdminLayout = () => {
     navigate('/login');
   };
 
-    const navItems = [
+    const allNavItems = [
       { path: '/admin', icon: LayoutDashboard, label: 'Bảng Điều Khiển' },
       { path: '/admin/destinations', icon: Map, label: 'Địa Điểm' },
       { path: '/admin/categories', icon: LayoutList, label: 'Danh Mục' },
       { path: '/admin/tours', icon: Compass, label: 'Gói Tour' },
       { path: '/admin/services', icon: Building, label: 'Dịch Vụ' },
-      { path: '/admin/bookings', icon: FileText, label: 'Đặt Tour/Dịch vụ' },
+      { path: '/admin/bookings', icon: FileText, label: 'Đặt Tour/Dịch vụ', adminOnly: true },
       { path: '/admin/articles', icon: FileText, label: 'Bài Viết eMagazine' },
       { path: '/admin/feedback', icon: Users, label: 'Đánh giá & Phản hồi' },
       { path: '/admin/social', icon: Users, label: 'Mạng Xã Hội' },
+      { path: '/admin/users', icon: UserCircle, label: 'Quản lý Người dùng', adminOnly: true },
     ];
 
-  if (user?.role === 'Admin') {
-    navItems.push({ path: '/admin/users', icon: UserCircle, label: 'Quản lý Người dùng' });
-  }
+    const navItems = allNavItems.filter(item => !item.adminOnly || user?.role === 'Admin');
 
   return (
     <div className="flex h-screen bg-background overflow-hidden font-sans">
